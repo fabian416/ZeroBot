@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/20/solid";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-
 import { Link, useLocation } from 'react-router-dom';
 
 type HeaderMenuLink = {

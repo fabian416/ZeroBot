@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react';
-import {
-  Transaction, keccak256, Signature, getBytes, SigningKey,
-} from 'ethers'
-import { v4 as uuidv4 } from 'uuid'
-import { useWalletClient } from 'wagmi'
-import { BrowserProvider } from 'ethers'
+import { useState } from 'react';
 import { useAccount } from 'wagmi'
-import * as circomlib from 'circomlibjs';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
   const handleGetIdentity = () => {};
 
@@ -23,6 +17,7 @@ export default function Home() {
           A ZK-based reCAPTCHA: privately prove you're not a bot to join a Discord channel
         </p>
         <div className="flex justify-center items-center">
+        {!isConnected ? <ConnectButton showBalance={false} /> :
           <button
             onClick={handleGetIdentity}
             disabled={(status !== "idle" && status !== "finish") || !address}
@@ -39,6 +34,7 @@ export default function Home() {
               finish: 'Done!'
             }[status]}
           </button>
+          }
         </div>
         {error && (
           <div className="mt-4 text-red-600 text-sm bg-red-100 p-2 rounded-md border border-red-200">
