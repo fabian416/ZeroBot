@@ -5,7 +5,7 @@ use dep::aztec::{
 };
 
 #[aztec]
-pub contract ZkIdentityRegistry {
+pub contract ZeroBot {
 
     #[storage]
     struct Storage<Context> {
