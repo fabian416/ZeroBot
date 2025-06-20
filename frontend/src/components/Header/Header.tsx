@@ -32,8 +32,8 @@ export const HeaderMenuLinks = () => {
             <Link
               to={href}
               className={`${
-                isActive ? "bg-gray-900 shadow-md" : ""
-              } bg-gray-900 hover:shadow-md focus:!bg-gray-900 text-white active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+                isActive ? "bg-[#2833c7] shadow-md" : ""
+              } bg-[#2833c7] hover:shadow-md focus:!bg-[#2833c7] text-white active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>
@@ -51,7 +51,7 @@ export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
-    <div className="sticky lg:static bg-gray-900 top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-2">
+    <div className="sticky lg:static bg-[#2833c7] top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 shadow-md shadow-secondary px-2">
       <div className="flex items-center justify-between w-full">
         <div className="flex items-center">
           <div className="sm:hidden dropdown">
@@ -76,7 +76,7 @@ export const Header = () => {
               </ul>
             )}
           </div>
-          <div className="flex justify-center items-center w-16 h-16 ml-2">
+          <div className="flex justify-center items-center w-16 h-16 ml-2 mr-2">
             <Link to="/">
               <img src="/logo.png" alt="logo" />
             </Link>
