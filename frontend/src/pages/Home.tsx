@@ -7,13 +7,16 @@ import { useWalletClient } from 'wagmi'
 import { BrowserProvider } from 'ethers'
 import { useAccount } from 'wagmi'
 import * as circomlib from 'circomlibjs';
+import ZKPassportComponent from '../components/zkPassport/zkPassport';
 
 export default function Home() {
-  const [status, setStatus] = useState<"idle" | "getting" | "challenge" | "creating" | "finish">("idle")
+  const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
   const { address } = useAccount();
 
-  const handleGetIdentity = () => {};
+  const handleGetIdentity = () => {
+    setStatus("zkPassport");
+  };
 
   return (
     <div className="flex flex-1 flex-col justify-center items-center w-full bg-gradient-to-b from-gray-50 to-gray-100 px-4">
@@ -22,6 +25,13 @@ export default function Home() {
         <p className="text-gray-600 text-base">
           A ZK-based reCAPTCHA: privately prove you're not a bot to join a Discord channel
         </p>
+        {status === "zkPassport" && (
+          <div className="mt-6">
+            <ZKPassportComponent 
+              onClose={() => setStatus("idle")}
+            />
+          </div>
+        )}
         <div className="flex justify-center items-center">
           <button
             onClick={handleGetIdentity}
@@ -35,6 +45,7 @@ export default function Home() {
               idle: 'Get identity',
               getting: 'Fetching identity...',
               challenge: 'Verifying account ownership...',
+              zkPassport: 'Verifying zkPassport...',
               creating: 'Creating identity...',
               finish: 'Done!'
             }[status]}
