@@ -13,7 +13,8 @@
     "express": "^5.1.0"
   }, 
   "scripts": {
-  "start": "bun run index.js",
-  "dev": "bunx nodemon index.js"
+  "start": "bun run server.js",
+  "dev": "bunx nodemon server.js"
   }
+  
 }

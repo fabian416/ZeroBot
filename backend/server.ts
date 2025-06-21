@@ -1,5 +1,6 @@
+
 Bun.serve({
-  port: 1337,
+  port: Bun.env.PORT,
   routes: {
     '/api/status': {
       POST: async req => {
@@ -9,6 +10,6 @@ Bun.serve({
     }
   }, 
   fetch(req) {
-    return new Response("ZK Not found", { status: 404 }); 
+    return new Response("404, ZK Not found", { status: 404 }); 
   },
 });
