@@ -5,6 +5,12 @@ global ETH_PREFIX_BYTES: [u8; 28] = [
     115, 97, 103, 101, 58, 10, 51, 50,
 ];
 
+global FIELD_HASH: u32 = 0;
+global FIELD_NAME: u32 = 1;
+global FIELD_LAST_NAME: u32 = 2;
+global FIELD_DOCUMENT_TYPE: u32 = 3;
+global FIELD_DOCUMENT_NUMBER: u32 = 4;
+
 #[aztec]
 pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
@@ -12,6 +18,8 @@ pub contract ZeroBot {
         macros::{functions::{initializer, public, private}, storage::storage},
         prelude::{AztecAddress, PublicImmutable, Map, PrivateSet},
     };
+    use dep::aztec::messages::logs::note::encode_and_encrypt_note;
+
     use poseidon::poseidon2;
 
     #[storage]
@@ -59,6 +67,23 @@ pub contract ZeroBot {
         storage.document_number.at(ethAddress).add(IdentityFieldNote::new(document_number, context.msg_sender()));
 */
     }
+
+    #[private]
+    fn write_field(field_selector: u8, key: Field, value: Field) {
+        let owner = context.msg_sender();
+        let note = IdentityFieldNote::new(value, owner);
+
+        match field_selector {
+            FIELD_HASH => storage.hash.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            FIELD_NAME => storage.name.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            FIELD_DOCUMENT_NUMBER => storage.document_number.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            _ => assert(false, "Field selector not recognized"),
+        }
+    }
+
+
     /*
     // Retrieve the Identity
     #[public]
