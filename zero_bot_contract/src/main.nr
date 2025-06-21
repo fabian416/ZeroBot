@@ -6,7 +6,7 @@ pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
         macros::{functions::{initializer, view, public, private, utility}, storage::storage},
-        prelude::{AztecAddress, NoteViewerOptions, SharedMutable, PrivateMutable, PublicMutable, PublicImmutable, Map, PrivateSet, PrivateContext},
+        prelude::{AztecAddress, NoteViewerOptions, SharedMutable, PublicImmutable, Map, PrivateSet, PrivateContext},
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
@@ -17,6 +17,7 @@ pub contract ZeroBot {
     global FIELD_LAST_NAME: Field = 1;
     global FIELD_DOCUMENT_TYPE: Field = 2;
     global FIELD_DOCUMENT_NUMBER: Field = 3;
+    global FIELD_HASH: Field = 4;
     global CHANGE_AUTHORIZED_DELAY_BLOCKS: u32 = 1;
 
     #[storage]
@@ -27,6 +28,7 @@ pub contract ZeroBot {
         last_name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_type: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_number: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
+        hash: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         public_key: Map<Field, PrivateSet<EcdsaPublicKeyNote, Context>, Context>,
     }
 
@@ -111,6 +113,7 @@ pub contract ZeroBot {
         _write_field(FIELD_LAST_NAME, identity_hash, last_name, &mut context, storage);
         _write_field(FIELD_DOCUMENT_TYPE, identity_hash, document_type, &mut context, storage);
         _write_field(FIELD_DOCUMENT_NUMBER, identity_hash, document_number, &mut context, storage);
+        _write_field(FIELD_HASH, pub_key_hash, identity_hash, &mut context, storage);
     }
 
 
@@ -130,6 +133,7 @@ pub contract ZeroBot {
             FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_DOCUMENT_NUMBER => storage.document_number.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
+            FIELD_HASH => storage.hash.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             _ => assert(false, "Field selector not recognized"),
         }
     }
@@ -171,11 +175,13 @@ pub contract ZeroBot {
         signed_message_hash: [u8; 32],
     ) -> [Field; 4] {
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
-
-        let name_notes = storage.name.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
-        let last_name_notes = storage.last_name.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
-        let document_type_notes = storage.document_type.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
-        let document_number_notes = storage.document_number.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        let hash_notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        assert(hash_notes.len() == 1, "No hash found for this address");
+        let identity_hash = hash_notes.get_unchecked(0).identity_field;
+        let name_notes = storage.name.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        let last_name_notes = storage.last_name.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        let document_type_notes = storage.document_type.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        let document_number_notes = storage.document_number.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
 
         assert(name_notes.len() == 1, "No name found for this address");
         assert(last_name_notes.len() == 1, "No last name found for this address");
@@ -199,11 +205,9 @@ pub contract ZeroBot {
         signed_message_hash: [u8; 32],
     ) -> Field {
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
-
-        pub_key_hash
-/*
-        let notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
-        assert(notes.len() == 1, "No identity hash found for this address");
-        notes.get_unchecked(0).identity_field
-  */  }
+        let hash_notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
+        assert(hash_notes.len() == 1, "No hash found for this address");
+        let identity_hash = hash_notes.get_unchecked(0).identity_field;
+        identity_hash   
+    }
 }
