@@ -21,6 +21,7 @@ COPY . .
 
 # [optional] tests & build
 ENV NODE_ENV=production
+ENV PORT=3117
 RUN bun test
 RUN bun run build
 
