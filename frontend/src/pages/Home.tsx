@@ -33,6 +33,7 @@ export default function Home() {
 
   const handleGetIdentity = async () => {
    try {
+      await deployContractFunction();
       setStatus("zkPassport");
     } catch (err: any) {
       console.log("ERROR DEPLOYING CONTRACT", err.message)
@@ -56,7 +57,7 @@ export default function Home() {
       const pxe = createPXEClient(PXE_URL);
       await pxe.registerContractClass(ZeroBotContractArtifact);
       const [wallet] = await getDeployedTestAccountsWallets(pxe);
-      const tx = ZeroBotContract.deploy(wallet).send();
+      const tx = ZeroBotContract.deploy(wallet, wallet.getAddress()).send();
       await tx.wait();
       const deployed = await tx.deployed();
       await pxe.registerContract({
@@ -73,9 +74,9 @@ export default function Home() {
 
   const createIdentity = async (contract: string, passportData: any) => {
       const pxe = createPXEClient(PXE_URL);
-      const [wallet1] = await getDeployedTestAccountsWallets(pxe);
+      const [wallet] = await getDeployedTestAccountsWallets(pxe);
   
-      const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet1);
+      const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
       const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
       const tx = zeroBot.methods
         .create_identity(
@@ -95,7 +96,7 @@ export default function Home() {
       await tx.wait();
       console.log('✅ Create Identity confirmed!');
   
-      return { txHash: txHash.toString() };
+      return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   }
 
 
@@ -143,13 +144,17 @@ export default function Home() {
     return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   };
 
-  const getPrivateIdentity = async (contract: string) => {
+  const getPrivateIdentity = async (contract: string, user: any) => {
+    const { userSignature, userPubKeyX, userPubKeyY, userDigest } = user;
     const pxe = createPXEClient(PXE_URL);
     const [wallet] = await getDeployedTestAccountsWallets(pxe);
     const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
 
     const result = await zeroBot.methods.get_identity(
-      
+      userPubKeyX,
+      userPubKeyY,
+      userSignature,
+      userDigest
     ).simulate({});
     
     console.log(result);

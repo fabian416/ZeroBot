@@ -68,23 +68,20 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
             return;
           }
 */
-          try {
             const passportData = {
               firstname: convertStringToBigInt(result.firstname?.disclose?.result ?? ''),
               lastname: convertStringToBigInt(result.lastname?.disclose?.result ?? ''),
               documentType: convertStringToBigInt(result.document_type?.disclose?.result ?? ''),
               documentNumber: convertStringToBigInt(result.document_number?.disclose?.result ?? ''),
             };
-            
-            const hash = await createIdentity(contractAddress, passportData);
-            await getPrivateIdentity(contractAddress, hash);
+            console.log(passportData);
+            const user = await createIdentity(contractAddress, passportData);
+            console.log(user);
+            await getPrivateIdentity(contractAddress, user);
 
             console.log('🎫 zkPassport Data:', passportData);
             setZkPassportData(passportData);
-          } catch (err) {
-            console.error('❌ Error al enviar datos al backend:', err);
-            setLoading(false);
-          }
+     
         });
 
         onReject(() => {

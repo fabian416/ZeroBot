@@ -18,7 +18,7 @@ pub contract ZeroBot {
     global FIELD_DOCUMENT_TYPE: Field = 2;
     global FIELD_DOCUMENT_NUMBER: Field = 3;
     global FIELD_HASH: Field = 4;
-    global CHANGE_AUTHORIZED_DELAY_BLOCKS: u32 = 1;
+    global CHANGE_AUTHORIZED_DELAY_BLOCKS: u32 = 0;
 
     #[storage]
     struct Storage<Context> {
@@ -173,11 +173,12 @@ pub contract ZeroBot {
         pub_key_y: [u8; 32],
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
-    ) -> [Field; 4] {
+    ) -> [Field; 5] {
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
         let hash_notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
         assert(hash_notes.len() == 1, "No hash found for this address");
         let identity_hash = hash_notes.get_unchecked(0).identity_field;
+
         let name_notes = storage.name.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
         let last_name_notes = storage.last_name.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
         let document_type_notes = storage.document_type.at(identity_hash).view_notes(NoteViewerOptions::new().set_limit(1));
@@ -189,25 +190,11 @@ pub contract ZeroBot {
         assert(document_number_notes.len() == 1, "No document number found for this address");
 
         [
+            identity_hash,
             name_notes.get_unchecked(0).identity_field,
             last_name_notes.get_unchecked(0).identity_field,
             document_type_notes.get_unchecked(0).identity_field,
             document_number_notes.get_unchecked(0).identity_field,
         ]
-    }
-
-    // // Check if an identity is registered
-    #[utility]
-    unconstrained fn get_identity_hash(
-        pub_key_x: [u8; 32],
-        pub_key_y: [u8; 32],
-        signature: [u8; 64],
-        signed_message_hash: [u8; 32],
-    ) -> Field {
-        let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
-        let hash_notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
-        assert(hash_notes.len() == 1, "No hash found for this address");
-        let identity_hash = hash_notes.get_unchecked(0).identity_field;
-        identity_hash   
     }
 }

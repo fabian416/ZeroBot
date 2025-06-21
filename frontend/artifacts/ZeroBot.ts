@@ -70,14 +70,14 @@ export class ZeroBotContract extends ContractBase {
   /**
    * Creates a tx to deploy a new instance of this contract.
    */
-  public static deploy(wallet: Wallet, ) {
+  public static deploy(wallet: Wallet, admin: AztecAddressLike) {
     return new DeployMethod<ZeroBotContract>(PublicKeys.default(), wallet, ZeroBotContractArtifact, ZeroBotContract.at, Array.from(arguments).slice(1));
   }
 
   /**
    * Creates a tx to deploy a new instance of this contract using the specified public keys hash to derive the address.
    */
-  public static deployWithPublicKeys(publicKeys: PublicKeys, wallet: Wallet, ) {
+  public static deployWithPublicKeys(publicKeys: PublicKeys, wallet: Wallet, admin: AztecAddressLike) {
     return new DeployMethod<ZeroBotContract>(publicKeys, wallet, ZeroBotContractArtifact, ZeroBotContract.at, Array.from(arguments).slice(2));
   }
 
@@ -115,59 +115,74 @@ export class ZeroBotContract extends ContractBase {
   }
   
 
-  public static get storage(): ContractStorageLayout<'hash' | 'name' | 'last_name' | 'document_type' | 'document_number'> {
+  public static get storage(): ContractStorageLayout<'admin' | 'authorized' | 'name' | 'last_name' | 'document_type' | 'document_number' | 'hash' | 'public_key'> {
       return {
-        hash: {
+        admin: {
       slot: new Fr(1n),
     },
-name: {
-      slot: new Fr(2n),
-    },
-last_name: {
+authorized: {
       slot: new Fr(3n),
     },
+name: {
+      slot: new Fr(7n),
+    },
+last_name: {
+      slot: new Fr(8n),
+    },
 document_type: {
-      slot: new Fr(4n),
+      slot: new Fr(9n),
     },
 document_number: {
-      slot: new Fr(5n),
+      slot: new Fr(10n),
+    },
+hash: {
+      slot: new Fr(11n),
+    },
+public_key: {
+      slot: new Fr(12n),
     }
-      } as ContractStorageLayout<'hash' | 'name' | 'last_name' | 'document_type' | 'document_number'>;
+      } as ContractStorageLayout<'admin' | 'authorized' | 'name' | 'last_name' | 'document_type' | 'document_number' | 'hash' | 'public_key'>;
     }
     
 
-  public static get notes(): ContractNotes<'EcdsaPublicKeyNote' | 'IdentityFieldNote' | 'ValueNote'> {
+  public static get notes(): ContractNotes<'EcdsaPublicKeyNote' | 'ValueNote' | 'IdentityFieldNote'> {
     return {
       EcdsaPublicKeyNote: {
-          id: new NoteSelector(0),
-        },
-IdentityFieldNote: {
           id: new NoteSelector(1),
         },
 ValueNote: {
           id: new NoteSelector(0),
+        },
+IdentityFieldNote: {
+          id: new NoteSelector(2),
         }
-    } as ContractNotes<'EcdsaPublicKeyNote' | 'IdentityFieldNote' | 'ValueNote'>;
+    } as ContractNotes<'EcdsaPublicKeyNote' | 'ValueNote' | 'IdentityFieldNote'>;
   }
   
 
   /** Type-safe wrappers for the public methods exposed by the contract. */
   public declare methods: {
     
-    /** constructor() */
-    constructor: (() => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+    /** constructor(admin: struct) */
+    constructor: ((admin: AztecAddressLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
     /** create_identity(name: field, last_name: field, document_type: field, document_number: field, pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
     create_identity: ((name: FieldLike, last_name: FieldLike, document_type: FieldLike, document_number: FieldLike, pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
+    /** get_authorized() */
+    get_authorized: (() => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+
+    /** get_authorized_in_private() */
+    get_authorized_in_private: (() => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+
     /** get_identity(pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
     get_identity: ((pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
-    /** get_identity_hash(pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
-    get_identity_hash: ((pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
-
     /** public_dispatch(selector: field) */
     public_dispatch: ((selector: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+
+    /** set_authorized(authorized: struct) */
+    set_authorized: ((authorized: AztecAddressLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
     /** sync_private_state() */
     sync_private_state: (() => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
