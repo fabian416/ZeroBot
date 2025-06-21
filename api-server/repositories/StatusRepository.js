@@ -1,14 +1,17 @@
 export class StatusRepository {
-    constructor() {
-        this.statuses = new Map();
-    }
+    statuses = new Map();
 
     async save(metadata) {
-            const id = metadata.id || Date.now().toString();
-            this.statuses.set(id, metadata);
-            const status = {
+        const id = metadata?.id || Date.now().toString();
+
+        if (this.statuses.has(id)) {
+            this.statuses.set(id, metadata, new Date().toISOString());
+            return this.statuses.get(id);
+        }
+
+        const status = {
             id,
-            ...statusData,
+            metadata,
             createdAt: new Date().toISOString()
         };
         

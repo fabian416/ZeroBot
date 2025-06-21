@@ -10,8 +10,8 @@ const statusController = new StatusController(statusService);
 export default {
     routes: {
         '/api/status': {
-            POST: async req => { statusController.update(req); },
-            GET: async req => { statusController.get(req); },
+            POST: async (req, res) => { return statusController.update(req, res); },
+            GET: async (req, res) => { return statusController.get(req, res); },
         },
     },
 }

@@ -81,4 +81,4 @@ bot.login(token).then(param => {
 });
 
 
-export default bot;
+module.exports = bot;
