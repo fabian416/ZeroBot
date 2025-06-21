@@ -107,30 +107,33 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
   }
 
  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full relative">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
-        >
-          &times;
-        </button>
+    <div className="bg-white/95 text-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full relative neon-shadow flex flex-col items-center space-y-6">
+      <button
+        onClick={onClose}
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl bg-transparent border-none outline-none p-2"
+        aria-label="Close"
+      >
+        &times;
+      </button>
 
-        <p className="text-center text-black mb-6 mt-10">
-          Since this is your first time using <strong>ZeroBot</strong>, we’ll verify your identity using <strong>zkPassport</strong>.
-        </p>
+      <p className="text-center text-lg font-medium text-gray-700">
+        Since this is your first time using <strong>ZeroBot</strong>, we’ll verify your identity using <strong>zkPassport</strong>.
+      </p>
 
-        {loading ? (
-          <p className="text-blue-600 font-semibold text-center">Processing zkPassport...</p>
-        ) : url ? (
-          <div className="flex justify-center">
-            <QRCode value={url} size={256} />
-          </div>
-        ) : (
-          <p className="text-gray-500 text-center">Loading...</p>
-        )}
-      </div>
+      {loading ? (
+        <div className="flex flex-col items-center justify-center h-64 w-full">
+          <div className="loading-spinner border-blue-500 border-t-transparent" />
+          <p className="text-blue-600 font-semibold text-center mt-4">Processing zkPassport...</p>
+        </div>
+      ) : url ? (
+        <div className="p-4 bg-white rounded-lg border-4 border-gray-100 shadow-inner">
+          <QRCode value={url} size={240} />
+        </div>
+      ) : (
+        <div className="flex items-center justify-center h-64 w-full">
+          <p className="text-gray-500 text-center">Initializing QR Code...</p>
+        </div>
+      )}
     </div>
   );
-
 }

@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { poseidonHash } from '../utils/utils';
 import internalApi from '../api/axios';
 
-export default function Home() {
+export default function Home({ onClose }: { onClose?: () => void }) {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
   const [contract, setContract] = useState<string | null>(null)
@@ -92,9 +92,7 @@ export default function Home() {
         .send();
   
       const txHash = await tx.getTxHash();
-      console.log(`🚀 Create Identity TX sent: ${txHash.toString()}`);
       await tx.wait();
-      console.log('✅ Create Identity confirmed!');
   
       return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   }
@@ -161,49 +159,74 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-center items-center w-full bg-gradient-to-b from-gray-50 to-gray-100 px-4">
-      <div className="max-w-2xl w-full text-center space-y-6">
-        <h1 className="text-3xl font-bold text-gray-900 pt-10">ZeroBot</h1>
-        <p className="text-gray-600 text-base">
-          A ZK-based reCAPTCHA: privately prove you're not a bot to join a Discord channel
-        </p>
-        {status === "zkPassport" && (
-          <div className="mt-6">
-            <ZKPassportComponent 
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+      <div className="relative w-full max-w-md mx-auto p-0">
+        <div className="futuristic-card neon-shadow p-8 pt-6 flex flex-col items-center">
+          {onClose && (
+            <button
+              className="absolute top-4 right-4 text-purple-200 hover:text-white text-xl font-bold bg-transparent border-none outline-none"
+              onClick={onClose}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          )}
+          <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg mb-4">
+            <span className="text-white font-bold text-xl">ZB</span>
+          </div>
+          <h1 className="gradient-text text-3xl font-black mb-2">ZeroBot</h1>
+          <p className="text-purple-200/90 text-center font-medium mb-6">
+            Privately prove you're not a bot to join the Discord server
+          </p>
+          {status === "zkPassport" ? (
+            <ZKPassportComponent
               contractAddress={contract}
               createIdentity={createIdentity}
-              getPrivateIdentity={getPrivateIdentity}
+              getPrivateIdentity={() => {}}
               onClose={() => setStatus("idle")}
             />
-          </div>
-        )}
-        <div className="flex justify-center items-center">
-        {!isConnected ? <ConnectButton showBalance={false} /> :
-          <button
-            onClick={handleGetIdentity}
-            disabled={(status !== "idle" && status !== "finish") || !address}
-            className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-6 px-8 rounded-lg text-lg transition duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {status !== 'idle' && status !== 'finish' && (
-              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            )}
-            {{
-              idle: 'Get identity',
-              getting: 'Fetching identity...',
-              challenge: 'Verifying account ownership...',
-              zkPassport: 'Verifying zkPassport...',
-              creating: 'Creating identity...',
-              finish: 'Done!'
-            }[status]}
-          </button>
-          }
+          ) : (
+            <div className="w-full flex flex-col items-center">
+              {!isConnected ? (
+                <div className="glass-effect p-4 rounded-xl border border-purple-500/30 w-full">
+                  <p className="text-purple-200/80 mb-2 font-medium text-center">Connect your wallet to get started</p>
+                  <ConnectButton showBalance={false} />
+                </div>
+              ) : (
+                <button
+                  onClick={handleGetIdentity}
+                  disabled={(status !== "idle" && status !== "finish") || !address}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-xl text-base transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 shadow-lg border border-purple-400/30 mt-2"
+                >
+                  {status !== 'idle' && status !== 'finish' && (
+                    <div className="loading-spinner" />
+                  )}
+                  <span className="font-semibold">
+                    {{
+                      idle: 'Get Identity',
+                      getting: 'Fetching identity...',
+                      challenge: 'Verifying account ownership...',
+                      zkPassport: 'Verifying zkPassport...',
+                      creating: 'Creating identity...',
+                      finish: 'Done!'
+                    }[status]}
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
+          <button onClick={sendPostRequest}>Send Post Request</button>
+          {error && (
+            <div className="mt-4 bg-red-500/10 border border-red-500/30 text-red-300 p-3 rounded-xl backdrop-blur-sm w-full text-center">
+              <div className="flex items-center gap-2 justify-center">
+                <svg className="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="font-medium">{error}</span>
+              </div>
+            </div>
+          )}
         </div>
-        <button onClick={sendPostRequest}>Send Post Request</button>
-        {error && (
-          <div className="mt-4 text-red-600 text-sm bg-red-100 p-2 rounded-md border border-red-200">
-            {error}
-          </div>
-        )}
       </div>
     </div>
   );
