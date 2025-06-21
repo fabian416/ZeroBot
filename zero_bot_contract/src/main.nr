@@ -5,14 +5,14 @@ global ETH_PREFIX_BYTES: [u8; 28] = [
     115, 97, 103, 101, 58, 10, 51, 50,
 ];
 
-
 #[aztec]
 pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
-        macros::{functions::{initializer, public}, storage::storage},
+        macros::{functions::{initializer, public, private}, storage::storage},
         prelude::{AztecAddress, PublicImmutable, Map, PrivateSet},
     };
+    use poseidon::poseidon2;
 
     #[storage]
     struct Storage<Context> {
@@ -28,42 +28,38 @@ pub contract ZeroBot {
     fn constructor() {
         // Nothing to initialize yet
     }
-    /*
+    
     // Create a new identity
     #[private]
     fn create_identity(
-        user_pub_key_x: [u8; 32],
-        user_pub_key_y: [u8; 32],
-        user_signature: [u8; 64],
-        nonce_hash: Field,
-        timestamp_hash: Field,
+        ethAddress: Field,
         name: Field,
         last_name: Field,
         document_type: Field,
         document_number: Field,
     ) {
-        let signed_user_hash = unsafe { compute_user_hash(nonce_hash, timestamp_hash) };
-
+      
         // Recover the user's Ethereum address from their public key and signature over their identity hash.
         // This shows that the user claims ownership of a particular address (e.g., for KYC or eligibility proofs).
-        let user_addr = ecrecover(
-            user_pub_key_x,
-            user_pub_key_y,
-            user_signature,
-            signed_user_hash,
-        );
+        // let user_addr = ecrecover(
+        //     user_pub_key_x,
+        //     user_pub_key_y,
+        //     user_signature,
+        //     signed_user_hash,
+        // );
 
-        let hash = poseidon::bn254::hash_1([document_number]);
-
-        assert(!storage.identity.at(user_addr).is_initialized(), "Identity already registered");
-        storage.identity.at(user_addr).write(Identity {
-            hash,
-            name,
-            last_name,
-            document_type,
-            document_number
-        });
+        let hash = poseidon2::Poseidon2::hash([document_number], 1);
+  /*
+        assert(!storage.hash.at(ethAddress).is_initialized(), "Identity already registered");
+      
+        storage.hash.at(ethAddress).add(IdentityFieldNote::new(hash, context.msg_sender()));
+        storage.name.at(ethAddress).add(IdentityFieldNote::new(name, context.msg_sender()));
+        storage.last_name.at(ethAddress).add(IdentityFieldNote::new(last_name, context.msg_sender()));
+        storage.document_type.at(ethAddress).add(IdentityFieldNote::new(document_type, context.msg_sender()));
+        storage.document_number.at(ethAddress).add(IdentityFieldNote::new(document_number, context.msg_sender()));
+*/
     }
+    /*
     // Retrieve the Identity
     #[public]
     fn get_identity(identity_hash: Field) -> AztecAddress {
@@ -74,24 +70,14 @@ pub contract ZeroBot {
     fn is_human(identity_hash: Field) -> bool {
         return storage.identities.at(identity_hash).is_initialized();
     }
-
-    // Unconstrained function to compute the hash that the user signs.
-    // This combines nonce and timestamp with Poseidon, adds the Ethereum prefix, and hashes with Keccak.
-    unconstrained fn compute_user_hash(nonce_hash: Field, timestamp_hash: Field) -> [u8; 32] {
-        let combined_hash = poseidon::bn254::hash_2([nonce_hash, timestamp_hash]);
-        let message = concat_prefix_and_digest(ETH_PREFIX_BYTES, combined_hash.to_be_bytes());
-        keccak256(message, 60)
-    }
-
-    pub fn concat_prefix_and_digest(prefix: [u8; 28], digest: [u8; 32]) -> [u8; 60] {
-        let mut out: [u8; 60] = [0; 60];
-        for i in 0..28 {
-            out[i] = prefix[i];
-        }
-        for i in 0..32 {
-            out[28 + i] = digest[i];
-        }
-        out
-    }
-    */
+    // Compute the user hash from nonce and timestamp
+    #[private]
+    fn compute_identity_hash(
+        name: Field,
+        last_name: Field,
+        document_type: Field,
+        document_number: Field,
+    ) -> Field {
+        poseidon2::Poseidon2::hash([name, last_name, document_type, document_number], 4)
+    }*/
 }
