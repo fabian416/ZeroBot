@@ -49,14 +49,15 @@ pub contract ZeroBot {
         // );
 
         let hash = poseidon2::Poseidon2::hash([document_number], 1);
-
+  /*
         assert(!storage.hash.at(ethAddress).is_initialized(), "Identity already registered");
+      
         storage.hash.at(ethAddress).add(IdentityFieldNote::new(hash, context.msg_sender()));
         storage.name.at(ethAddress).add(IdentityFieldNote::new(name, context.msg_sender()));
         storage.last_name.at(ethAddress).add(IdentityFieldNote::new(last_name, context.msg_sender()));
         storage.document_type.at(ethAddress).add(IdentityFieldNote::new(document_type, context.msg_sender()));
         storage.document_number.at(ethAddress).add(IdentityFieldNote::new(document_number, context.msg_sender()));
-
+*/
     }
     /*
     // Retrieve the Identity
@@ -78,5 +79,5 @@ pub contract ZeroBot {
         document_number: Field,
     ) -> Field {
         poseidon2::Poseidon2::hash([name, last_name, document_type, document_number], 4)
-    }
+    }*/
 }
