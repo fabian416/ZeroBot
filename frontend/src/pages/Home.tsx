@@ -35,7 +35,8 @@ export default function Home() {
       console.log("ERROR DEPLOYING CONTRACT", err.message)
     }
   };
-
+  
+  
   const deployContract = async () => {
       const pxe = createPXEClient(PXE_URL);
       await pxe.registerContractClass(ZeroBotContractArtifact);
