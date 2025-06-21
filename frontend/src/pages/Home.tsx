@@ -17,27 +17,33 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
 
-  const handleGetIdentity = async () => {
-    //setStatus("zkPassport");
-
+  const deployContractFlow = async () => {
     const {contractAddress} = await deployContract();
     await createIdentity(contractAddress);
     await getPrivateIdentity(contractAddress);
+  }
+
+  const handleGetIdentity = async () => {
+    setStatus("zkPassport");
   };
 
   const deployContract = async () => {
-    const pxe = createPXEClient(PXE_URL);
-    const [wallet] = await getDeployedTestAccountsWallets(pxe);
-
-    const deployedContract = await ZeroBotContract.deploy(wallet)
-    .send()
-    .deployed();
-    console.log(deployedContract)
-
-    const contractAddress = deployedContract.address.toString();
-    console.log(`✅ Identity Contract deployed at ${contractAddress}`);
-
-    return { contractAddress };
+    try {
+      const pxe = createPXEClient(PXE_URL);
+      const [wallet] = await getDeployedTestAccountsWallets(pxe);
+  
+      const deployedContract = await ZeroBotContract.deploy(wallet)
+      .send()
+      .deployed();
+      console.log(deployedContract)
+  
+      const contractAddress = deployedContract.address.toString();
+      console.log(`✅ Identity Contract deployed at ${contractAddress}`);
+  
+      return { contractAddress };
+    } catch (error) {
+      console.log("ERROR DEPLOYING CONTRACT", error.message)
+    }
   }
 
   const createIdentity = async (contract: string) => {

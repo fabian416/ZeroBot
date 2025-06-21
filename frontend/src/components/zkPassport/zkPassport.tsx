@@ -56,7 +56,7 @@ export default function ZKPassportComponent({onClose}: any) {
         });
 
         onProofGenerated((proof) => {
-          console.log('✅ Proof generated');
+          console.log('✅ Proof generated', proof);
         });
 
         onResult(async ({ verified, result }) => {
