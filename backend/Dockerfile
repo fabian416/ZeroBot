@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y git build-essential python3 && apt-get 
 WORKDIR /app
 
 # Copia los archivos de dependencias y los instala
-COPY bun.lockb package.json ./
+COPY bun.lock package.json ./
 RUN bun install
 
 # Copia el resto del proyecto
