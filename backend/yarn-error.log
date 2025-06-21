@@ -1,0 +1,65 @@
+Arguments: 
+  /home/lucholeonel/.nvm/versions/node/v22.13.0/bin/node /home/lucholeonel/.cache/node/corepack/v1/yarn/1.22.19/bin/yarn.js install
+
+PATH: 
+  /home/lucholeonel/.bun/bin:/home/lucholeonel/.aztec/bin:/home/lucholeonel/.bb:/home/lucholeonel/.bb:/home/lucholeonel/.local/bin:/home/lucholeonel/bin:/home/lucholeonel/.bun/bin:/home/lucholeonel/.aztec/bin:/home/lucholeonel/.bb:/home/lucholeonel/.bb:/home/lucholeonel/.local/bin:/home/lucholeonel/.nvm/versions/node/v22.13.0/bin:/home/lucholeonel/bin:/home/lucholeonel/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/lucholeonel/.foundry/bin:/home/lucholeonel/.vlayer/bin:/home/lucholeonel/.foundry/bin:/home/lucholeonel/.vlayer/bin:/home/lucholeonel/.nargo/bin:/home/lucholeonel/Android/Sdk/emulator:/home/lucholeonel/Android/Sdk/platform-tools:/home/lucholeonel/Android/Sdk/cmdline-tools/latest/bin:/home/lucholeonel/.config/Code/User/globalStorage/github.copilot-chat/debugCommand:/home/lucholeonel/.foundry/bin:/home/lucholeonel/.vlayer/bin:/home/lucholeonel/.nargo/bin:/home/lucholeonel/Android/Sdk/emulator:/home/lucholeonel/Android/Sdk/platform-tools:/home/lucholeonel/Android/Sdk/cmdline-tools/latest/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  22.13.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:120:26)
+
+npm manifest: 
+  {
+    "name": "api-server",
+    "module": "server.js",
+    "type": "module",
+    "private": true,
+    "dependencies": {
+      "asynckit": "^0.4.0",
+      "callsites": "^3.1.0",
+      "combined-stream": "^1.0.8",
+      "delayed-stream": "^1.0.0",
+      "discord-api-types": "^0.22.0",
+      "discord.js": "^14.15.3",
+      "dot-prop": "^6.0.1",
+      "dotenv": "^16.5.0",
+      "is-obj": "^2.0.0",
+      "lodash.isequal": "^4.5.0",
+      "mime-db": "^1.50.0",
+      "mime-types": "^2.1.33",
+      "node-fetch": "^3.2.10",
+      "ow": "^0.27.0",
+      "tr46": "^0.0.3",
+      "ts-mixer": "^6.0.0",
+      "tslib": "^2.3.1",
+      "type-fest": "^1.4.0",
+      "vali-date": "^1.0.0",
+      "webidl-conversions": "^3.0.1",
+      "whatwg-url": "^5.0.0",
+      "ws": "^7.5.5"
+    },
+    "devDependencies": {
+      "@types/bun": "latest"
+    },
+    "peerDependencies": {
+      "typescript": "^5"
+    },
+    "scripts": {
+      "dev": "bun run server.js"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
