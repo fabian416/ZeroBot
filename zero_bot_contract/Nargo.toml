@@ -8,5 +8,6 @@ aztec = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87
 value_note = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87.7", directory = "noir-projects/aztec-nr/value-note" }
 easy_private_state = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87.7", directory = "noir-projects/aztec-nr/easy-private-state" }
 poseidon = { tag = "v0.1.0", git = "https://github.com/noir-lang/poseidon" }
-ecdsa_k_account_contract = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87.9", directory = "noir-projects/noir-contracts/contracts/account/ecdsa_k_account_contract" }
+ecdsa_k_account_contract = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87.7", directory = "noir-projects/noir-contracts/contracts/account/ecdsa_k_account_contract" }
 sha256 = { tag = "v0.1.2", git = "https://github.com/noir-lang/sha256" }
+ecdsa_public_key_note = { git = "https://github.com/AztecProtocol/aztec-packages/", tag = "v0.87.7", directory = "noir-projects/noir-contracts/contracts/libs/ecdsa_public_key_note" }
