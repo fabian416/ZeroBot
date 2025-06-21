@@ -15,6 +15,7 @@ pub contract ZeroBot {
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
+    use std::ecdsa_secp256k1::verify_signature;
 
     global FIELD_HASH: Field = 0;
     global FIELD_NAME: Field = 1;
