@@ -5,34 +5,73 @@ use dep::aztec::macros::aztec;
 pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
-        macros::{functions::{initializer, public, private, utility}, storage::storage},
-        prelude::{AztecAddress, NoteViewerOptions, PrivateMutable, PublicMutable, PublicImmutable, Map, PrivateSet, PrivateContext},
+        macros::{functions::{initializer, view, public, private, utility}, storage::storage},
+        prelude::{AztecAddress, NoteViewerOptions, SharedMutable, PrivateMutable, PublicMutable, PublicImmutable, Map, PrivateSet, PrivateContext},
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
     use std::ecdsa_secp256k1::verify_signature;
-    use aztec::protocol_types::traits::ToField;
 
-    global FIELD_ADMIN: Field = 0;
-    global FIELD_NAME: Field = 1;
-    global FIELD_LAST_NAME: Field = 2;
-    global FIELD_DOCUMENT_TYPE: Field = 3;
-    global FIELD_DOCUMENT_NUMBER: Field = 4;
+    global FIELD_NAME: Field = 0;
+    global FIELD_LAST_NAME: Field = 1;
+    global FIELD_DOCUMENT_TYPE: Field = 2;
+    global FIELD_DOCUMENT_NUMBER: Field = 3;
+    global CHANGE_AUTHORIZED_DELAY_BLOCKS: u32 = 1;
 
     #[storage]
     struct Storage<Context> {
-        admins: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
+        admin: PublicImmutable<AztecAddress, Context>,
+        authorized: SharedMutable<AztecAddress, CHANGE_AUTHORIZED_DELAY_BLOCKS, Context>,
         name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         last_name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_type: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_number: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
     }
 
-    #[private]
+    #[public]
     #[initializer]
     fn constructor(admin: AztecAddress) {
         assert(!admin.is_zero(), "invalid admin");
-        _write_field(FIELD_ADMIN, admin.to_field(), 1, &mut context, storage);
+        storage.admin.initialize(admin);
+        storage.authorized.schedule_value_change(admin);
+    }
+
+    // docs:start:shared_mutable_schedule
+    #[public]
+    fn set_authorized(authorized: AztecAddress) {
+        assert_eq(storage.admin.read(), context.msg_sender(), "caller is not admin");
+        storage.authorized.schedule_value_change(authorized);
+        // docs:end:shared_mutable_schedule
+    }
+
+    // docs:start:public_getter
+    #[public]
+    #[view]
+    fn get_authorized() -> AztecAddress {
+        // docs:start:shared_mutable_get_current_public
+        storage.authorized.get_current_value()
+        // docs:end:shared_mutable_get_current_public
+    }
+
+
+    #[contract_library_method]
+    fn _do_private_authorized_thing(
+        context: &mut PrivateContext,
+        storage: Storage<&mut PrivateContext>
+    ) {
+        // Reading a value from authorized in private automatically adds an extra validity condition: the base rollup
+        // circuit will reject this tx if included in a block past the block horizon, which is as far as the circuit can
+        // guarantee the value will not change from some historical value (due to CHANGE_AUTHORIZED_DELAY_BLOCKS).
+        // docs:start:shared_mutable_get_current_private
+        let authorized = storage.authorized.get_current_value();
+        // docs:end:shared_mutable_get_current_private
+        assert_eq(authorized, context.msg_sender(), "caller is not authorized");
+    }
+
+    #[private]
+    #[view]
+    fn get_authorized_in_private() -> AztecAddress {
+        storage.authorized.get_current_value()
     }
    
     
@@ -48,6 +87,7 @@ pub contract ZeroBot {
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
     ) {
+        _do_private_authorized_thing(&mut context, storage);
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
         let identity_hash = poseidon2::Poseidon2::hash(
@@ -65,13 +105,6 @@ pub contract ZeroBot {
     }
 
 
-    #[utility]
-    unconstrained fn _only_admin(context: &mut PrivateContext) {
-        let msg_sender = context.msg_sender().to_field();
-        let admin_notes = storage.admins.at(msg_sender).view_notes(NoteViewerOptions::new().set_limit(1));
-        assert(admin_notes.len() == 1, "Unauthorized");
-    }
-
     #[contract_library_method]
     fn _write_field(
         field_selector: Field,
@@ -84,7 +117,6 @@ pub contract ZeroBot {
         let note = IdentityFieldNote::new(value, owner);
 
         match field_selector {
-            FIELD_ADMIN => storage.admins.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_NAME => storage.name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
@@ -129,7 +161,6 @@ pub contract ZeroBot {
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
     ) -> [Field; 4] {
-        _only_admin(&mut context);
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
         let name_notes = storage.name.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
