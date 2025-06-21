@@ -14,14 +14,13 @@ import { PXE_URL } from '../utils/constants';
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
+  const [contract, setContract] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
 
   const handleGetIdentity = async () => {
-    //setStatus("zkPassport");
-
     const {contractAddress} = await deployContract();
-    await createIdentity(contractAddress);
-    await getPrivateIdentity(contractAddress);
+    setContract(contractAddress);
+    setStatus("zkPassport");
   };
 
   const deployContract = async () => {
@@ -42,13 +41,19 @@ export default function Home() {
     return { contractAddress };
   }
 
-  const createIdentity = async (contract: string) => {
+  const createIdentity = async (contract: string, passportData: any) => {
       const pxe = createPXEClient(PXE_URL);
-      const [wallet1, wallet2] = await getDeployedTestAccountsWallets(pxe);
+      const [wallet1] = await getDeployedTestAccountsWallets(pxe);
   
       const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet1);
       const tx = zeroBot.methods
-        .create_identity(BigInt(2), BigInt(2), BigInt(2), BigInt(2), BigInt(2))
+        .create_identity(
+          BigInt(2),
+          passportData.firstname, 
+          passportData.lastname,
+          passportData.documentType,
+          passportData.documentNumber
+        )
         .send();
   
       const txHash = await tx.getTxHash();
@@ -68,7 +73,6 @@ export default function Home() {
     
     console.log(result);
   }
-  
 
   return (
     <div className="flex flex-1 flex-col justify-center items-center w-full bg-gradient-to-b from-gray-50 to-gray-100 px-4">
@@ -80,6 +84,9 @@ export default function Home() {
         {status === "zkPassport" && (
           <div className="mt-6">
             <ZKPassportComponent 
+              contractAddress={contract}
+              createIdentity={createIdentity}
+              getPrivateIdentity={getPrivateIdentity}
               onClose={() => setStatus("idle")}
             />
           </div>

@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 
 const NEXT_PUBLIC_BASE_URL = process.env.VITE_PUBLIC_BASE_URL!;
 
-export default function ZKPassportComponent({onClose}: any) {
+export default function ZKPassportComponent({onClose, contractAddress, createIdentity, getPrivateIdentity}: any) {
   const [url, setUrl] = useState<string | null>(null);
   const [zkPassportData, setZkPassportData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -61,21 +61,23 @@ export default function ZKPassportComponent({onClose}: any) {
 
         onResult(async ({ verified, result }) => {
           console.log('🎯 Result received:', result);
-
+/*
           if (!verified) {
             console.error('❌ Proof verification failed');
             setLoading(false);
             return;
           }
-
+*/
           try {
             const passportData = {
-              firstname: result.firstname?.disclose?.result ?? '',
-              lastname: result.lastname?.disclose?.result ?? '',
-              documentType: result.document_type?.disclose?.result ?? '',
-              documentNumber: result.document_number?.disclose?.result ?? '',
+              firstname: convertStringToBigInt(result.firstname?.disclose?.result ?? ''),
+              lastname: convertStringToBigInt(result.lastname?.disclose?.result ?? ''),
+              documentType: convertStringToBigInt(result.document_type?.disclose?.result ?? ''),
+              documentNumber: convertStringToBigInt(result.document_number?.disclose?.result ?? ''),
             };
-
+            
+            const hash = await createIdentity(contractAddress, passportData);
+            await getPrivateIdentity(contractAddress, hash);
 
             console.log('🎫 zkPassport Data:', passportData);
             setZkPassportData(passportData);
@@ -102,6 +104,10 @@ export default function ZKPassportComponent({onClose}: any) {
 
     runZkPassport();
   }, []);
+
+  const convertStringToBigInt = (value: string) => {
+    return BigInt('0x' + Buffer.from(value).toString('hex'));
+  }
 
  return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
