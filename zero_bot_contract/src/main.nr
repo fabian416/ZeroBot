@@ -11,7 +11,7 @@ pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
         macros::{functions::{initializer, public, private}, storage::storage},
-        prelude::{AztecAddress, PublicImmutable, Map, PrivateSet},
+        prelude::{AztecAddress, PublicImmutable, Map, PrivateSet, PrivateContext},
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
@@ -58,11 +58,11 @@ pub contract ZeroBot {
 
         let hash = poseidon2::Poseidon2::hash([document_number], 1);
 
-        _write_field(FIELD_HASH, ethAddress, hash);
-        _write_field(FIELD_NAME, ethAddress, name);
-        _write_field(FIELD_LAST_NAME, ethAddress, last_name);
-        _write_field(FIELD_DOCUMENT_TYPE, ethAddress, document_type);
-        _write_field(FIELD_DOCUMENT_NUMBER, ethAddress, document_number);
+        _write_field(FIELD_HASH, ethAddress, hash, &mut context, storage);
+        _write_field(FIELD_NAME, ethAddress, name, &mut context, storage);
+        _write_field(FIELD_LAST_NAME, ethAddress, last_name, &mut context, storage);
+        _write_field(FIELD_DOCUMENT_TYPE, ethAddress, document_type, &mut context, storage);
+        _write_field(FIELD_DOCUMENT_NUMBER, ethAddress, document_number, &mut context, storage);
   /*
         assert(!storage.hash.at(ethAddress).is_initialized(), "Identity already registered");
       
@@ -74,17 +74,23 @@ pub contract ZeroBot {
 */
     }
 
-    #[private]
-    fn _write_field(field_selector: Field, key: Field, value: Field) {
+    #[contract_library_method]
+    fn _write_field(
+        field_selector: Field,
+        key: Field,
+        value: Field,
+        context: &mut PrivateContext,
+        storage: Storage<&mut PrivateContext>
+    ) {
         let owner = context.msg_sender();
         let note = IdentityFieldNote::new(value, owner);
 
         match field_selector {
-            FIELD_HASH => storage.hash.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
-            FIELD_NAME => storage.name.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
-            FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
-            FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
-            FIELD_DOCUMENT_NUMBER => storage.document_number.at(key).insert(note).emit(encode_and_encrypt_note(&mut context, owner, owner)),
+            FIELD_HASH => storage.hash.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
+            FIELD_NAME => storage.name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
+            FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
+            FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
+            FIELD_DOCUMENT_NUMBER => storage.document_number.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             _ => assert(false, "Field selector not recognized"),
         }
     }
