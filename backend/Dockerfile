@@ -31,7 +31,7 @@ COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/server.ts .
 COPY --from=prerelease /usr/src/app/package.json .
 
-# run the app 
+# run the app
 USER bun
 EXPOSE 3117/tcp
 CMD ["bun", "start"]
