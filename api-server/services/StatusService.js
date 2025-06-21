@@ -1,4 +1,4 @@
-import removeNewUserRole from "../../discord-bot/utils/removeRole.js"
+import removeNewUserRole from "../discord-bot/utils/removeRole.js"
 
 export class StatusService {
     constructor(statusRepository) {
