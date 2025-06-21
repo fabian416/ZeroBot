@@ -7,34 +7,36 @@ import {
   createPXEClient,
   AztecAddress,
 } from '@aztec/aztec.js';
+
+import {
+  Transaction, keccak256, toBeArray, Signature, getBytes, SigningKey, toUtf8Bytes, toBeHex  , zeroPadValue
+} from 'ethers'
 import { getDeployedTestAccountsWallets } from '@aztec/accounts/testing';
 import { ZeroBotContract, ZeroBotContractArtifact } from '../../artifacts/ZeroBot';
 import { PXE_URL } from '../utils/constants';
+import { useWalletClient } from 'wagmi';
+import { BrowserProvider } from 'ethers';
+import { v4 as uuidv4 } from 'uuid';
+import { poseidonHash } from '../utils/utils';
 
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
   const [contract, setContract] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
-
-<<<<<<< HEAD
-  const handleGetIdentity = async () => {
-    const {contractAddress} = await deployContract();
-    setContract(contractAddress);
-=======
-  const deployContractFlow = async () => {
-    const {contractAddress} = await deployContract();
-    await createIdentity(contractAddress);
-    await getPrivateIdentity(contractAddress);
-  }
+  const { data: walletClient } = useWalletClient()
 
   const handleGetIdentity = async () => {
->>>>>>> fa5b05a5a3cf2c412f900aa37b54b7fcb42a0636
-    setStatus("zkPassport");
+   try {
+      const {contractAddress} = await deployContract();
+      setContract(contractAddress);
+      setStatus("zkPassport");
+    } catch (err: any) {
+      console.log("ERROR DEPLOYING CONTRACT", err.message)
+    }
   };
 
   const deployContract = async () => {
-   try {
       const pxe = createPXEClient(PXE_URL);
       await pxe.registerContractClass(ZeroBotContractArtifact);
       const [wallet] = await getDeployedTestAccountsWallets(pxe);
@@ -50,9 +52,7 @@ export default function Home() {
       console.log(`✅ Identity Contract deployed at ${contractAddress}`);
 
       return { contractAddress };
-    } catch (err: any) {
-      console.log("ERROR DEPLOYING CONTRACT", err.message)
-    }
+ 
   }
 
   const createIdentity = async (contract: string, passportData: any) => {
@@ -60,13 +60,17 @@ export default function Home() {
       const [wallet1] = await getDeployedTestAccountsWallets(pxe);
   
       const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet1);
+      const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
       const tx = zeroBot.methods
         .create_identity(
-          BigInt(2),
           passportData.firstname, 
           passportData.lastname,
           passportData.documentType,
-          passportData.documentNumber
+          passportData.documentNumber,
+          userPubKeyX,
+          userPubKeyY,
+          userSignature,
+          userDigest
         )
         .send();
   
@@ -78,12 +82,59 @@ export default function Home() {
       return { txHash: txHash.toString() };
   }
 
+
+  const parseUserChallenge = async () => {
+    if (!walletClient) throw new Error('No wallet client');
+
+    const provider = new BrowserProvider(walletClient.transport);
+    const signer = await provider.getSigner();
+    const nonce = uuidv4();
+    const timestamp = Date.now().toString();
+
+    const poseidon = await circomlib.buildPoseidon();
+    const {hash, value1Hash, value2Hash} = await poseidonHash(nonce, timestamp);
+
+    const nonceBigInt = poseidon.F.toObject(value1Hash).toString();
+    const timestampBigInt = poseidon.F.toObject(value2Hash).toString();
+    const hashBigInt = poseidon.F.toObject(hash);
+    const digest = zeroPadValue(toBeHex(hashBigInt), 32);
+    const signerAddress = await signer.getAddress();
+    const sig = await walletClient.signMessage({
+      account: signerAddress as `0x${string}`,
+      message: { raw: digest as `0x${string}` }
+    });
+
+    const signature = Signature.from(sig);
+    const rBytes = getBytes(signature.r);
+    const sBytes = getBytes(signature.s);
+    const userSignature = [...rBytes, ...sBytes];
+
+    const prefix = "\x19Ethereum Signed Message:\n32";
+    const digestBytes = getBytes(digest);
+    const prefixedMessage = keccak256(
+      new Uint8Array([
+        ...toUtf8Bytes(prefix),
+        ...digestBytes
+      ])
+    );
+
+    const pubKeyHex = SigningKey.recoverPublicKey(prefixedMessage, sig);
+    const pubKeyBytes = getBytes(pubKeyHex);
+    const userPubKeyX = Array.from(pubKeyBytes.slice(1, 33));
+    const userPubKeyY = Array.from(pubKeyBytes.slice(33, 65));
+
+    const userDigest = Array.from(getBytes(digest));
+    return { userSignature, userPubKeyX, userPubKeyY, userDigest };
+  };
+
   const getPrivateIdentity = async (contract: string) => {
     const pxe = createPXEClient(PXE_URL);
     const [wallet] = await getDeployedTestAccountsWallets(pxe);
     const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
 
-    const result = await zeroBot.methods.get_identity(BigInt(2)).simulate({});
+    const result = await zeroBot.methods.get_identity(
+      
+    ).simulate({});
     
     console.log(result);
   }

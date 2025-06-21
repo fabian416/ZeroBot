@@ -136,15 +136,18 @@ document_number: {
     }
     
 
-  public static get notes(): ContractNotes<'IdentityFieldNote' | 'ValueNote'> {
+  public static get notes(): ContractNotes<'EcdsaPublicKeyNote' | 'IdentityFieldNote' | 'ValueNote'> {
     return {
-      IdentityFieldNote: {
+      EcdsaPublicKeyNote: {
+          id: new NoteSelector(0),
+        },
+IdentityFieldNote: {
           id: new NoteSelector(1),
         },
 ValueNote: {
           id: new NoteSelector(0),
         }
-    } as ContractNotes<'IdentityFieldNote' | 'ValueNote'>;
+    } as ContractNotes<'EcdsaPublicKeyNote' | 'IdentityFieldNote' | 'ValueNote'>;
   }
   
 
@@ -154,14 +157,14 @@ ValueNote: {
     /** constructor() */
     constructor: (() => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
-    /** create_identity(ethAddress: field, name: field, last_name: field, document_type: field, document_number: field) */
-    create_identity: ((ethAddress: FieldLike, name: FieldLike, last_name: FieldLike, document_type: FieldLike, document_number: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+    /** create_identity(name: field, last_name: field, document_type: field, document_number: field, pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
+    create_identity: ((name: FieldLike, last_name: FieldLike, document_type: FieldLike, document_number: FieldLike, pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
-    /** get_identity(address: field) */
-    get_identity: ((address: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+    /** get_identity(pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
+    get_identity: ((pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
-    /** get_identity_hash(address: field) */
-    get_identity_hash: ((address: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
+    /** get_identity_hash(pub_key_x: array, pub_key_y: array, signature: array, signed_message_hash: array) */
+    get_identity_hash: ((pub_key_x: (bigint | number)[], pub_key_y: (bigint | number)[], signature: (bigint | number)[], signed_message_hash: (bigint | number)[]) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
 
     /** public_dispatch(selector: field) */
     public_dispatch: ((selector: FieldLike) => ContractFunctionInteraction) & Pick<ContractMethod, 'selector'>;
