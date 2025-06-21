@@ -11,7 +11,7 @@ pub contract ZeroBot {
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
     use std::ecdsa_secp256k1::verify_signature;
-
+    use dep::ecdsa_public_key_note::EcdsaPublicKeyNote;
 
     global FIELD_NAME: Field = 0;
     global FIELD_LAST_NAME: Field = 1;
@@ -24,6 +24,8 @@ pub contract ZeroBot {
         last_name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_type: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_number: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
+        public_key: Map<Field, PrivateSet<EcdsaPublicKeyNote, Context>, Context>, 
+
     }
 
     #[public]
@@ -31,7 +33,7 @@ pub contract ZeroBot {
     fn constructor() {
         // Nothing to initialize yet
     }
-    
+
     // Create a new identity
     #[private]
     fn create_identity(
@@ -52,6 +54,17 @@ pub contract ZeroBot {
             1
         );
 
+        let this = context.this_address();
+
+        // Check if identity already exists
+        let pub_key_note = EcdsaPublicKeyNote::new(pub_key_x, pub_key_y, this);
+
+        // Storage instance
+        storage.public_key.at(identity_hash).insert(pub_key_note).emit(encode_and_encrypt_note(
+            &mut context,
+            this,
+            this,
+        ));
         _write_field(FIELD_NAME, identity_hash, name, &mut context, storage);
         _write_field(FIELD_LAST_NAME, identity_hash, last_name, &mut context, storage);
         _write_field(FIELD_DOCUMENT_TYPE, identity_hash, document_type, &mut context, storage);
