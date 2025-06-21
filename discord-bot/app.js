@@ -46,10 +46,10 @@ commandSubFolders.forEach(folder => {
 const eventFiles = fs.readdirSync('./events/').filter(f => f.endsWith('.js'))
 for (const file of eventFiles) {
     const event = require(`./events/${file}`)
-    if(event.once) {
-        bot.once(event.name, (...args) => event.execute(...args, bot))
+    if(event.default.once) {
+        bot.once(event.default.name, (...args) => event.default.execute(...args, bot))
     } else {
-        bot.on(event.name, (...args) => event.execute(...args, bot))
+        bot.on(event.default.name, (...args) => event.default.execute(...args, bot))
     }
 }
 
