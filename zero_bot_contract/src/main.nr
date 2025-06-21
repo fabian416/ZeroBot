@@ -6,31 +6,35 @@ pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
         macros::{functions::{initializer, public, private, utility}, storage::storage},
-        prelude::{AztecAddress, NoteViewerOptions, PublicImmutable, Map, PrivateSet, PrivateContext},
+        prelude::{AztecAddress, NoteViewerOptions, PrivateMutable, PublicMutable, PublicImmutable, Map, PrivateSet, PrivateContext},
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
     use poseidon::poseidon2;
     use std::ecdsa_secp256k1::verify_signature;
+    use aztec::protocol_types::traits::ToField;
 
-
-    global FIELD_NAME: Field = 0;
-    global FIELD_LAST_NAME: Field = 1;
-    global FIELD_DOCUMENT_TYPE: Field = 2;
-    global FIELD_DOCUMENT_NUMBER: Field = 3;
+    global FIELD_ADMIN: Field = 0;
+    global FIELD_NAME: Field = 1;
+    global FIELD_LAST_NAME: Field = 2;
+    global FIELD_DOCUMENT_TYPE: Field = 3;
+    global FIELD_DOCUMENT_NUMBER: Field = 4;
 
     #[storage]
     struct Storage<Context> {
+        admins: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         last_name: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_type: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
         document_number: Map<Field, PrivateSet<IdentityFieldNote, Context>, Context>,
     }
 
-    #[public]
+    #[private]
     #[initializer]
-    fn constructor() {
-        // Nothing to initialize yet
+    fn constructor(admin: AztecAddress) {
+        assert(!admin.is_zero(), "invalid admin");
+        _write_field(FIELD_ADMIN, admin.to_field(), 1, &mut context, storage);
     }
+   
     
     // Create a new identity
     #[private]
@@ -44,7 +48,6 @@ pub contract ZeroBot {
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
     ) {
-
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
         let identity_hash = poseidon2::Poseidon2::hash(
@@ -61,6 +64,14 @@ pub contract ZeroBot {
 */
     }
 
+
+    #[utility]
+    unconstrained fn _only_admin(context: &mut PrivateContext) {
+        let msg_sender = context.msg_sender().to_field();
+        let admin_notes = storage.admins.at(msg_sender).view_notes(NoteViewerOptions::new().set_limit(1));
+        assert(admin_notes.len() == 1, "Unauthorized");
+    }
+
     #[contract_library_method]
     fn _write_field(
         field_selector: Field,
@@ -73,6 +84,7 @@ pub contract ZeroBot {
         let note = IdentityFieldNote::new(value, owner);
 
         match field_selector {
+            FIELD_ADMIN => storage.admins.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_NAME => storage.name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_LAST_NAME => storage.last_name.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
             FIELD_DOCUMENT_TYPE => storage.document_type.at(key).insert(note).emit(encode_and_encrypt_note(context, owner, owner)),
@@ -117,7 +129,7 @@ pub contract ZeroBot {
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
     ) -> [Field; 4] {
-
+        _only_admin(&mut context);
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
         let name_notes = storage.name.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
