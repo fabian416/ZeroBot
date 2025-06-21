@@ -1,5 +1,6 @@
 import routes from './routes/routes.js';
-import { handleCors, getCo } from './middleware/cors.js';
+import { handleCors, getCorsHeaders } from './middleware/cors.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 Bun.serve({
   port: Bun.env.PORT || 1337,
@@ -7,29 +8,23 @@ Bun.serve({
   fetch: async (req) => {
     const url = new URL(req.url);
     const path = url.pathname;
-    const origin = req.headers.get('Origin');
     
     // Check if route exists
     if (routes.routes[path] && routes.routes[path][req.method]) {
-      const res = await routes.routes[path][req.method](req, new Response());
-      
-      return handleCors(req, res);
+      try {
+        const res = await routes.routes[path][req.method](req);
+        return handleCors(req, res);
+      } catch (error) {
+        errorHandler(error, req);
+      }
     }
     
-    // Handle 404
-    return new Response("404, ZK Not found", { 
-      status: 404,
-      headers: getCorsHeaders(origin)
-    });
+    const notFoundError = new Error("Route not found");
+    notFoundError.name = "NotFoundError";
+    return errorHandler(notFoundError);
   },
   
-  error(error) {
-    console.error(error);
-    return new Response("500, Internal Server Error", { 
-      status: 500,
-      headers: getCorsHeaders(null)
-    });
-  }
+  error: errorHandler
 });
 
 console.log(` API Server running on port ${Bun.env.PORT || 1337}`);

@@ -42,4 +42,4 @@ const handleCors = async (req, res) => {
     return res;
 }
 
-export { handleCors }; 
+export { handleCors, getCorsHeaders, ALLOWED_ORIGINS };
