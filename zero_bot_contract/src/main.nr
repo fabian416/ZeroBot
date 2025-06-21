@@ -1,10 +1,10 @@
 mod identity_field_note;
 use dep::aztec::macros::aztec;
+
 global ETH_PREFIX_BYTES: [u8; 28] = [
     25, 69, 116, 104, 101, 114, 101, 117, 109, 32, 83, 105, 103, 110, 101, 100, 32, 77, 101, 115,
     115, 97, 103, 101, 58, 10, 51, 50,
 ];
-
 
 #[aztec]
 pub contract ZeroBot {
@@ -46,20 +46,30 @@ pub contract ZeroBot {
         last_name: Field,
         document_type: Field,
         document_number: Field,
+        pub_key_x: [u8; 32],
+        pub_key_y: [u8; 32],
+        signature: [u8; 64],
+        signed_message_hash: [u8; 32],
     ) {
-      
-        // Recover the user's Ethereum address from their public key and signature over their identity hash.
-        // This shows that the user claims ownership of a particular address (e.g., for KYC or eligibility proofs).
-        // let user_addr = ecrecover(
-        //     user_pub_key_x,
-        //     user_pub_key_y,
-        //     user_signature,
-        //     signed_user_hash,
-        // );
 
-        let hash = poseidon2::Poseidon2::hash([document_number], 1);
+        // Verify signature with ECDSA secp256k1
+        assert(
+            std::ecdsa_secp256k1::verify_signature(
+                pub_key_x,
+                pub_key_y,
+                signature,
+                // Hash the signed message
+                sha256::digest(signed_message_hash) 
+            ),
+            "Signature invalid"
+        );
 
-        _write_field(FIELD_HASH, ethAddress, hash, &mut context, storage);
+        let identity_hash = poseidon2::Poseidon2::hash(
+            [ethAddress, name, last_name, document_type, document_number],
+            1
+        );
+
+        _write_field(FIELD_HASH, ethAddress, identity_hash, &mut context, storage);
         _write_field(FIELD_NAME, ethAddress, name, &mut context, storage);
         _write_field(FIELD_LAST_NAME, ethAddress, last_name, &mut context, storage);
         _write_field(FIELD_DOCUMENT_TYPE, ethAddress, document_type, &mut context, storage);
