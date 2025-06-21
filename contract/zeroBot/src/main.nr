@@ -3,11 +3,18 @@ mod identity;
 use crate::identity::Identity;
 use dep::aztec::macros::aztec;
 use dep::aztec::{
-    macros::{functions::{initializer, public}, storage::storage},
-    prelude::{AztecAddress, PublicImmutable, Map}
+    event::event_interface::EventInterface,
+    macros::{
+        events::event,
+        functions::{initializer, internal, private, public},
+        storage::storage,
+    },
+    messages::logs::note::encode_and_encrypt_note,
+    prelude::{AztecAddress, Map, PrivateSet, PublicImmutable},
+    protocol_types::traits::{Serialize, ToField},
+    unencrypted_logs::unencrypted_event_emission::encode_event,
+    utils::comparison::Comparator,
 };
-use dep::ecrecover::ecrecover;
-use std::hash::poseidon;
 
 global ETH_PREFIX_BYTES: [u8; 28] = [
     25, 69, 116, 104, 101, 114, 101, 117, 109, 32, 83, 105, 103, 110, 101, 100, 32, 77, 101, 115,
