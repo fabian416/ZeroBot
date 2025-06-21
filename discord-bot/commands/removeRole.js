@@ -7,7 +7,7 @@ export default {
         usage: `!removeRole <user>`,
     },
     async run (bot, message, args) {
-        console.log("removeRole", args)
+        // console.log("removeRole", args)
         const user = message.mentions.users.first();
         if (!user) {
             message.channel.send("Please mention a user to remove the role from");

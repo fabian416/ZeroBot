@@ -32,10 +32,9 @@ for (const file of commandFiles) {
         console.log(`${file} loaded`)
 
         // Handle both ES6 default exports and CommonJS exports
-        console.log("props", props)
         const command = props.default || props;
         bot.commands.set(command.config.name, command)
-    })
+    })()
 }
 
 // Get folders inside commands folder
@@ -57,6 +56,8 @@ commandSubFolders.forEach(async folder => {
 const eventFiles = fs.readdirSync('./events/').filter(f => f.endsWith('.js'))
 for (const file of eventFiles) {
     const event = await import(`./events/${file}`)
+    console.log(`${file} loaded`)
+
     if(event.default.once) {
         bot.once(event.default.name, (...args) => event.default.execute(...args, bot))
     } else {
