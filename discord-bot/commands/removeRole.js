@@ -1,6 +1,6 @@
-const removeNewUserRole = require('../utils/removeRole.js');
+import removeNewUserRole from '../utils/removeRole.js';
 
-module.exports = {
+export default {
     config: {
         name: 'removeRole',
         description: 'Remove the New User role from a user',

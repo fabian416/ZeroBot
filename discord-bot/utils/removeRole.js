@@ -1,4 +1,4 @@
-const bot = require('../app.js');
+import bot from '../app.js';
 
 async function removeNewUserRole(userId, guildId, shouldRemove) {
     try {
@@ -40,5 +40,4 @@ async function removeNewUserRole(userId, guildId, shouldRemove) {
     }
 }
 
-// ... existing code ...
-module.exports = removeNewUserRole
+export default removeNewUserRole;
