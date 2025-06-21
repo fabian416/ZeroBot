@@ -29,7 +29,6 @@ const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js')
 for (const file of commandFiles) {
     const props = require(`./commands/${file}`)
     console.log(`${file} loaded`)
-    console.log(props)
     bot.commands.set(props.default.config.name, props.default)
 }
 // Get folders inside commands folder
