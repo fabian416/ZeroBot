@@ -1,6 +1,12 @@
 import fs from "fs";
 import { Client, Collection, Partials, GatewayIntentBits} from 'discord.js';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -25,10 +31,10 @@ const token = process.env.TOKEN;
 bot.commands = new Collection();
 
 // Load Command files from commands folder
-const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js'))
+const commandFiles = fs.readdirSync(path.join(__dirname, 'commands')).filter(f => f.endsWith('.js'))
 for (const file of commandFiles) {
     (async () => {
-        const props = await import(`./commands/${file}`)
+        const props = await import(path.join(__dirname, 'commands', file))
         console.log(`${file} loaded`)
 
         // Handle both ES6 default exports and CommonJS exports
@@ -38,13 +44,13 @@ for (const file of commandFiles) {
 }
 
 // Get folders inside commands folder
-const commandSubFolders = fs.readdirSync('./commands/').filter(f => !f.endsWith('.js'))
+const commandSubFolders = fs.readdirSync(path.join(__dirname, 'commands')).filter(f => !f.endsWith('.js'))
 
 // Load Command files from subfolders inside commands folder
 commandSubFolders.forEach(async folder => {
-    const commandFiles = fs.readdirSync(`./commands/${folder}/`).filter(f => f.endsWith('.js'))
+    const commandFiles = fs.readdirSync(path.join(__dirname, 'commands', folder)).filter(f => f.endsWith('.js'))
     for (const file of commandFiles) {
-        const props = await import(`./commands/${folder}/${file}`)
+        const props = await import(path.join(__dirname, 'commands', folder, file))
         console.log(`${file} loaded from ${folder}`)
         // Handle both ES6 default exports and CommonJS exports
         const command = props.default || props;
@@ -53,9 +59,9 @@ commandSubFolders.forEach(async folder => {
 });
 
 // Load Event files from events folder
-const eventFiles = fs.readdirSync('./events/').filter(f => f.endsWith('.js'))
+const eventFiles = fs.readdirSync(path.join(__dirname, 'events')).filter(f => f.endsWith('.js'))
 for (const file of eventFiles) {
-    const event = await import(`./events/${file}`)
+    const event = await import(path.join(__dirname, 'events', file))
     console.log(`${file} loaded`)
 
     if(event.default.once) {
