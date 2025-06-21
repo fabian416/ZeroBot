@@ -17,28 +17,42 @@ export default function Home() {
   const [contract, setContract] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
 
+<<<<<<< HEAD
   const handleGetIdentity = async () => {
     const {contractAddress} = await deployContract();
     setContract(contractAddress);
+=======
+  const deployContractFlow = async () => {
+    const {contractAddress} = await deployContract();
+    await createIdentity(contractAddress);
+    await getPrivateIdentity(contractAddress);
+  }
+
+  const handleGetIdentity = async () => {
+>>>>>>> fa5b05a5a3cf2c412f900aa37b54b7fcb42a0636
     setStatus("zkPassport");
   };
 
   const deployContract = async () => {
-    const pxe = createPXEClient(PXE_URL);
-    await pxe.registerContractClass(ZeroBotContractArtifact);
-    const [wallet] = await getDeployedTestAccountsWallets(pxe);
-    const tx = ZeroBotContract.deploy(wallet).send();
-    await tx.wait();
-    const deployed = await tx.deployed();
-    await pxe.registerContract({
-      instance: deployed.instance,
-      artifact: ZeroBotContractArtifact
-    });
+   try {
+      const pxe = createPXEClient(PXE_URL);
+      await pxe.registerContractClass(ZeroBotContractArtifact);
+      const [wallet] = await getDeployedTestAccountsWallets(pxe);
+      const tx = ZeroBotContract.deploy(wallet).send();
+      await tx.wait();
+      const deployed = await tx.deployed();
+      await pxe.registerContract({
+        instance: deployed.instance,
+        artifact: ZeroBotContractArtifact
+      });
 
-    const contractAddress = deployed.address.toString();
-    console.log(`✅ Identity Contract deployed at ${contractAddress}`);
+      const contractAddress = deployed.address.toString();
+      console.log(`✅ Identity Contract deployed at ${contractAddress}`);
 
-    return { contractAddress };
+      return { contractAddress };
+    } catch (err: any) {
+      console.log("ERROR DEPLOYING CONTRACT", err.message)
+    }
   }
 
   const createIdentity = async (contract: string, passportData: any) => {
