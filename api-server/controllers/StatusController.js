@@ -7,6 +7,10 @@ export class StatusController {
     async update(req, res) {
         try {
             const {userId, guildId} = await req.json();
+            if(!userId || !guildId) {
+                return Response.json({ error: 'Missing userId or guildId' }, { status: 400 });
+            }
+            
             const result = await this.statusService.createStatus(userId, guildId);
             return Response.json(result, { status: 200 });
 
