@@ -17,22 +17,15 @@ export default function Home() {
   const [contract, setContract] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
 
-<<<<<<< HEAD
   const handleGetIdentity = async () => {
-    const {contractAddress} = await deployContract();
-    setContract(contractAddress);
-=======
-  const deployContractFlow = async () => {
-    const {contractAddress} = await deployContract();
-    await createIdentity(contractAddress);
-    await getPrivateIdentity(contractAddress);
-  }
-
-  const handleGetIdentity = async () => {
->>>>>>> fa5b05a5a3cf2c412f900aa37b54b7fcb42a0636
     setStatus("zkPassport");
   };
-
+  
+  const deployAndSetContract = async () => {
+    const {contractAddress} = await deployContract();
+    setContract(contractAddress);
+  }
+  
   const deployContract = async () => {
    try {
       const pxe = createPXEClient(PXE_URL);
