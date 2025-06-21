@@ -120,16 +120,4 @@ pub contract ZeroBot {
         assert(notes.len() == 1, "No identity hash found for this address");
         notes.get_unchecked(0).identity_field
     }
-
-    /*
-    // Compute the user hash from nonce and timestamp
-    #[private]
-    fn compute_identity_hash(
-        name: Field,
-        last_name: Field,
-        document_type: Field,
-        document_number: Field,
-    ) -> Field {
-        poseidon2::Poseidon2::hash([name, last_name, document_type, document_number], 4)
-    }*/
 }
