@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aztec/accounts": "^0.87.9",
     "@aztec/aztec.js": "^0.85.0",
     "@aztec/bb.js": "0.72.1",
     "@heroicons/react": "^2.2.0",
@@ -38,6 +39,7 @@
     "react-scan": "^0.0.54",
     "stream-browserify": "^3.0.0",
     "three": "^0.158.0",
+    "viem": "^2.31.3",
     "vite-plugin-node-polyfills": "^0.21.0",
     "wagmi": "^2.6.5"
   },

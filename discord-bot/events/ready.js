@@ -1,11 +1,19 @@
+import { ActivityType } from 'discord.js';
+
 export default {
     name: 'ready',
     once: true,
     execute(bot) {
-        // Log Bot's username and the amount of servers its in to console
-        console.log(`${bot.user.username} is online on ${bot.guilds.cache.size} servers!`);
+        // Enhanced console logging with styling
+        console.log('\n🤖 ═══════════════════════════════════════');
+        console.log(`✅ ${bot.user.username} is now ONLINE!`);
+        console.log(`🌐 Connected to ${bot.guilds.cache.size} server(s)`);
+        console.log(`👥 Serving ${bot.users.cache.size} users`);
+        console.log('🛡️  ZeroBot - Secure Discord Verification');
+        console.log('═══════════════════════════════════════\n');
 
-        // Set the Presence of the bot user to show 'Playing: My code'
-        bot.user.setPresence({ activities: [{ name: 'My code'}] });
+
+        // Log successful startup with timestamp
+        console.log(`🕐 Bot started at: ${new Date().toLocaleString()}`);
     }
 }
