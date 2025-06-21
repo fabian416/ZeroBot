@@ -1,0 +1,14 @@
+{
+  "name": "api-server",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "start": "bun run server.js",
+    "dev": "bunx nodemon server.js"
+  }
+}

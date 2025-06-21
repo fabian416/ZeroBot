@@ -1,6 +1,6 @@
-const fs = require("fs");
-const { Client, Collection, Partials, GatewayIntentBits} = require('discord.js');
-const dotenv = require('dotenv');
+import fs from "fs";
+import { Client, Collection, Partials, GatewayIntentBits} from 'discord.js';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -27,25 +27,36 @@ bot.commands = new Collection();
 // Load Command files from commands folder
 const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js'))
 for (const file of commandFiles) {
-    const props = require(`./commands/${file}`)
-    console.log(`${file} loaded`)
-    bot.commands.set(props.default.config.name, props.default)
+    (async () => {
+        const props = await import(`./commands/${file}`)
+        console.log(`${file} loaded`)
+
+        // Handle both ES6 default exports and CommonJS exports
+        console.log("props", props)
+        const command = props.default || props;
+        bot.commands.set(command.config.name, command)
+    })
 }
+
 // Get folders inside commands folder
 const commandSubFolders = fs.readdirSync('./commands/').filter(f => !f.endsWith('.js'))
+
 // Load Command files from subfolders inside commands folder
-commandSubFolders.forEach(folder => {
+commandSubFolders.forEach(async folder => {
     const commandFiles = fs.readdirSync(`./commands/${folder}/`).filter(f => f.endsWith('.js'))
     for (const file of commandFiles) {
-        const props = require(`./commands/${folder}/${file}`)
+        const props = await import(`./commands/${folder}/${file}`)
         console.log(`${file} loaded from ${folder}`)
-        bot.commands.set(props.default.config.name, props.default)
+        // Handle both ES6 default exports and CommonJS exports
+        const command = props.default || props;
+        bot.commands.set(command.config.name, command)
     }
 });
+
 // Load Event files from events folder
 const eventFiles = fs.readdirSync('./events/').filter(f => f.endsWith('.js'))
 for (const file of eventFiles) {
-    const event = require(`./events/${file}`)
+    const event = await import(`./events/${file}`)
     if(event.default.once) {
         bot.once(event.default.name, (...args) => event.default.execute(...args, bot))
     } else {
@@ -81,3 +92,4 @@ bot.login(token).then(param => {
 });
 
 
+export default bot;
