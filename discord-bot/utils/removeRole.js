@@ -1,6 +1,6 @@
 const bot = require('../app.js');
 
-export async function removeNewUserRole(userId, guildId, shouldRemove) {
+async function removeNewUserRole(userId, guildId, shouldRemove) {
     try {
         if (!shouldRemove) {
             return { success: false, message: 'Role removal not requested' };
@@ -39,3 +39,6 @@ export async function removeNewUserRole(userId, guildId, shouldRemove) {
         return { success: false, message: 'Error removing role: ' + error.message };
     }
 }
+
+// ... existing code ...
+module.exports = removeNewUserRole

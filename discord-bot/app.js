@@ -29,7 +29,9 @@ const commandFiles = fs.readdirSync('./commands/').filter(f => f.endsWith('.js')
 for (const file of commandFiles) {
     const props = require(`./commands/${file}`)
     console.log(`${file} loaded`)
-    bot.commands.set(props.default.config.name, props.default)
+    // Handle both ES6 default exports and CommonJS exports
+    const command = props.default || props;
+    bot.commands.set(command.config.name, command)
 }
 // Get folders inside commands folder
 const commandSubFolders = fs.readdirSync('./commands/').filter(f => !f.endsWith('.js'))
@@ -39,7 +41,9 @@ commandSubFolders.forEach(folder => {
     for (const file of commandFiles) {
         const props = require(`./commands/${folder}/${file}`)
         console.log(`${file} loaded from ${folder}`)
-        bot.commands.set(props.default.config.name, props.default)
+        // Handle both ES6 default exports and CommonJS exports
+        const command = props.default || props;
+        bot.commands.set(command.config.name, command)
     }
 });
 // Load Event files from events folder

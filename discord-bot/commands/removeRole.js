@@ -1,6 +1,6 @@
-const { removeNewUserRole } = require('../utils/removeRole.js');
+const removeNewUserRole = require('../utils/removeRole.js');
 
-export default {
+module.exports = {
     config: {
         name: 'removeRole',
         description: 'Remove the New User role from a user',
@@ -23,4 +23,3 @@ export default {
         }
     }
 }
-
