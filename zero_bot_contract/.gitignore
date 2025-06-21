@@ -34,4 +34,11 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .DS_Store
 
 # Noir / Rust build folder
+node_modules
 target/
+src/artifacts/
+log/
+.vscode
+.DS_Store
+codegenCache.json
+store/*
