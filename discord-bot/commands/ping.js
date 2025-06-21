@@ -32,8 +32,7 @@ export default {
         
         // Get the ping of the bot and send a styled embed message
         message.channel.send({
-            embeds: [pingEmbed],
-            components: [buttonRow]
+            embeds: [pingEmbed]
         });
     }
 }
