@@ -69,7 +69,7 @@ pub contract ZeroBot {
             1
         );
 
-        _write_field(FIELD_HASH, ethAddress, hash, &mut context, storage);
+        _write_field(FIELD_HASH, ethAddress, identity_hash, &mut context, storage);
         _write_field(FIELD_NAME, ethAddress, name, &mut context, storage);
         _write_field(FIELD_LAST_NAME, ethAddress, last_name, &mut context, storage);
         _write_field(FIELD_DOCUMENT_TYPE, ethAddress, document_type, &mut context, storage);
