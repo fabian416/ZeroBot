@@ -5,11 +5,6 @@ global ETH_PREFIX_BYTES: [u8; 28] = [
     115, 97, 103, 101, 58, 10, 51, 50,
 ];
 
-global FIELD_HASH: u32 = 0;
-global FIELD_NAME: u32 = 1;
-global FIELD_LAST_NAME: u32 = 2;
-global FIELD_DOCUMENT_TYPE: u32 = 3;
-global FIELD_DOCUMENT_NUMBER: u32 = 4;
 
 #[aztec]
 pub contract ZeroBot {
@@ -19,8 +14,13 @@ pub contract ZeroBot {
         prelude::{AztecAddress, PublicImmutable, Map, PrivateSet},
     };
     use dep::aztec::messages::logs::note::encode_and_encrypt_note;
-
     use poseidon::poseidon2;
+
+    global FIELD_HASH: Field = 0;
+    global FIELD_NAME: Field = 1;
+    global FIELD_LAST_NAME: Field = 2;
+    global FIELD_DOCUMENT_TYPE: Field = 3;
+    global FIELD_DOCUMENT_NUMBER: Field = 4;
 
     #[storage]
     struct Storage<Context> {
@@ -57,6 +57,12 @@ pub contract ZeroBot {
         // );
 
         let hash = poseidon2::Poseidon2::hash([document_number], 1);
+
+        _write_field(FIELD_HASH, ethAddress, hash);
+        _write_field(FIELD_NAME, ethAddress, name);
+        _write_field(FIELD_LAST_NAME, ethAddress, last_name);
+        _write_field(FIELD_DOCUMENT_TYPE, ethAddress, document_type);
+        _write_field(FIELD_DOCUMENT_NUMBER, ethAddress, document_number);
   /*
         assert(!storage.hash.at(ethAddress).is_initialized(), "Identity already registered");
       
@@ -69,7 +75,7 @@ pub contract ZeroBot {
     }
 
     #[private]
-    fn write_field(field_selector: u8, key: Field, value: Field) {
+    fn _write_field(field_selector: Field, key: Field, value: Field) {
         let owner = context.msg_sender();
         let note = IdentityFieldNote::new(value, owner);
 
