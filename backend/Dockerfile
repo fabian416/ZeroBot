@@ -13,6 +13,12 @@ RUN bun install
 # Copia el resto del proyecto
 COPY . .
 
+ARG TOKEN
+ENV TOKEN=${TOKEN}
+ENV PORT=1337
+ENV PREFIX=!
+ENV FRONTEND_URL=https://zero-bot.aichallenge.fun
+
 # Expone el puerto
 EXPOSE 1337
 
