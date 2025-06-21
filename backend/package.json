@@ -36,6 +36,6 @@
   },
   "scripts": {
     "start": "bun run server.js",
-    "dev": "bunx nodemon server.js"
+    "dev": "bun --watch server.js"
   }
 }
