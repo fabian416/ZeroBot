@@ -32,7 +32,7 @@
     "@aztec/stdlib" "0.87.9"
     tslib "^2.4.0"
 
-"@aztec/aztec.js@0.87.9":
+"@aztec/aztec.js@0.87.9", "@aztec/aztec.js@^0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/aztec.js/-/aztec.js-0.87.9.tgz#de2a7093ddb23e73efbb5e3be1cb2e248b8ea9a9"
   integrity sha512-1KFWBuQr3m1aFZkfdunDtA2wiyRTIFbBqwFg19pIuAwUzXMfkE9pxqaXNUjSQNyBkKK9mhfSeC3AsdPacYwhLg==
@@ -48,38 +48,10 @@
     tslib "^2.4.0"
     viem "2.23.7"
 
-"@aztec/aztec.js@^0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/aztec.js/-/aztec.js-0.85.0.tgz#4ba3c60efe2c1a0eabaa27f6025f06c161624548"
-  integrity sha512-MZbcaMyNjdSktbJ7BBQPJfasiEJwc80QZcuu+JR3kmGNTLJJ0ZFt2cn6VihJZu8Hxf7UTVUAm38JK0z/Y+ue1Q==
-  dependencies:
-    "@aztec/constants" "0.85.0"
-    "@aztec/entrypoints" "0.85.0"
-    "@aztec/ethereum" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    "@aztec/l1-artifacts" "0.85.0"
-    "@aztec/protocol-contracts" "0.85.0"
-    "@aztec/stdlib" "0.85.0"
-    axios "^1.7.2"
-    tslib "^2.4.0"
-    viem "2.23.7"
-
 "@aztec/bb.js@0.72.1":
   version "0.72.1"
   resolved "https://registry.yarnpkg.com/@aztec/bb.js/-/bb.js-0.72.1.tgz#d44e64b9c35af777b968ec8f541f81bc1d3e67ab"
   integrity sha512-CyySqBvaA/TJ/e8KksDp6vS44IUMY2LNJbigm4rKc3jJXjj0xc33V6V5DfC9kR0iVGnFFsvm+BlVBxFsCIQaAg==
-  dependencies:
-    comlink "^4.4.1"
-    commander "^12.1.0"
-    debug "^4.3.4"
-    fflate "^0.8.0"
-    pako "^2.1.0"
-    tslib "^2.4.0"
-
-"@aztec/bb.js@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/bb.js/-/bb.js-0.85.0.tgz#a653e7dace6d966946d54df3a5caae9b20f8dc5f"
-  integrity sha512-uNaXq6CmPWV5vb2Yr9nEI4VR7PahVXRA0eo1p3YfrHMfxhsWSee3yBTsQ3CktSC5yZdyJR10d2yld/mUGkDxKQ==
   dependencies:
     comlink "^4.4.1"
     commander "^12.1.0"
@@ -113,16 +85,6 @@
     pako "^2.1.0"
     tslib "^2.4.0"
 
-"@aztec/blob-lib@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/blob-lib/-/blob-lib-0.85.0.tgz#03e8af3e7acfb2ea0af58a9e599a98c7dd416173"
-  integrity sha512-C098+LZ8i8nSas7jnVwYheE65orG/SEKbaosZ59p+FGtN9G1X1kWJLw/j3jLFqRJSzdnpCXuW7sQ9P0pFBhdXw==
-  dependencies:
-    "@aztec/constants" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    c-kzg "4.0.0-alpha.1"
-    tslib "^2.4.0"
-
 "@aztec/blob-lib@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/blob-lib/-/blob-lib-0.87.9.tgz#359066ded01a576ddc9c789f55b51a0dd2f0378b"
@@ -133,29 +95,11 @@
     c-kzg "4.0.0-alpha.1"
     tslib "^2.4.0"
 
-"@aztec/constants@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/constants/-/constants-0.85.0.tgz#d5bfcf0dd94d8a6e5de0548e21f29d6d0f686dfc"
-  integrity sha512-h43MR0FUDCVkI04nPCDZ2S6sVQLpS0CFApyyO698abanOm8VKNboHVeZuHu5aeBKJeQE//jKtbv7qXlAGfF33Q==
-  dependencies:
-    tslib "^2.4.0"
-
 "@aztec/constants@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/constants/-/constants-0.87.9.tgz#5ce9e30cb9f69b2108cbf8dea6617444f4e255e0"
   integrity sha512-3vIndqlRlDu7Z22AcGmROPtxdr0SKU/HL8Jd/AA5ngsAeng6Mbh378giB2I3aa7OV/+q5bnGH6erPjWWQYa+/A==
   dependencies:
-    tslib "^2.4.0"
-
-"@aztec/entrypoints@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/entrypoints/-/entrypoints-0.85.0.tgz#097f585f12f5086ff220506138c4bdf8c53ff12c"
-  integrity sha512-KIMeNGmwnOx5KvM1uC3b4ek7HyRo9JQeHHzxR/jQqKkMcb1QFEXfcv+h3zgqjuFa/ABuocz2T9mPhIxhG75GEg==
-  dependencies:
-    "@aztec/constants" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    "@aztec/protocol-contracts" "0.85.0"
-    "@aztec/stdlib" "0.85.0"
     tslib "^2.4.0"
 
 "@aztec/entrypoints@0.87.9":
@@ -169,20 +113,6 @@
     "@aztec/stdlib" "0.87.9"
     tslib "^2.4.0"
 
-"@aztec/ethereum@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/ethereum/-/ethereum-0.85.0.tgz#77e2fe8609ae996ef4bfe0299457eb3db69c2745"
-  integrity sha512-c+NTMZh8eg2ot/dCgZr1TR4ONyUVI0RCHRgPk49GzCWM8OHYwCkD2VTkO21e6IHS0NRk9z1ucZVuzob+aq+jHg==
-  dependencies:
-    "@aztec/blob-lib" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    "@aztec/l1-artifacts" "0.85.0"
-    "@viem/anvil" "^0.0.10"
-    dotenv "^16.0.3"
-    tslib "^2.4.0"
-    viem "2.23.7"
-    zod "^3.23.8"
-
 "@aztec/ethereum@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/ethereum/-/ethereum-0.87.9.tgz#8697a455e4a63642358abe3b80f8e6c3e9ee6efd"
@@ -195,34 +125,6 @@
     dotenv "^16.0.3"
     tslib "^2.4.0"
     viem "2.23.7"
-    zod "^3.23.8"
-
-"@aztec/foundation@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/foundation/-/foundation-0.85.0.tgz#71dd5a8dd08784c246cf3bf6dd21fab6f36338fd"
-  integrity sha512-aJZsMswdL8TlJW+FpgUt9jToxGMEPdxYwE5SLwA9gw2n2DfIdpCtNW5GIbazqwASMchpzWdoxExNyT05efNY9A==
-  dependencies:
-    "@aztec/bb.js" "0.85.0"
-    "@koa/cors" "^5.0.0"
-    "@noble/curves" "^1.2.0"
-    bn.js "^5.2.1"
-    c-kzg "4.0.0-alpha.1"
-    colorette "^2.0.20"
-    debug "^4.3.4"
-    detect-node "^2.1.0"
-    hash.js "^1.1.7"
-    koa "^2.16.1"
-    koa-bodyparser "^4.4.0"
-    koa-compress "^5.1.0"
-    koa-router "^12.0.0"
-    leveldown "^6.1.1"
-    lodash.chunk "^4.2.0"
-    lodash.clonedeepwith "^4.5.0"
-    pako "^2.1.0"
-    pino "^9.5.0"
-    pino-pretty "^13.0.0"
-    sha3 "^2.1.4"
-    undici "^5.28.5"
     zod "^3.23.8"
 
 "@aztec/foundation@0.87.9":
@@ -251,13 +153,6 @@
     undici "^5.28.5"
     zod "^3.23.8"
 
-"@aztec/l1-artifacts@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/l1-artifacts/-/l1-artifacts-0.85.0.tgz#b43b6e53796c5a4ea771ea73eade967b632275f8"
-  integrity sha512-YKv/6JyX4X03qNaEKVJXE/yRqrorTUVhtbcYDr0ZAMP/L7LLW4k/U6N1z0kzhk3ICFrvybnfglRK/Oz/yW7F0Q==
-  dependencies:
-    tslib "^2.4.0"
-
 "@aztec/l1-artifacts@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/l1-artifacts/-/l1-artifacts-0.87.9.tgz#a4aefb27563123221132c6bd8adf64dcce80baa0"
@@ -277,18 +172,6 @@
   resolved "https://registry.yarnpkg.com/@aztec/noir-types/-/noir-types-0.87.9.tgz#525807a679a9e4bda2735eb99cc57ce47100e413"
   integrity sha512-UhRuJ4H2nFZiQk9KbWn4Yk56IwdZ06T2QRzCD9LurpTEABTMrPFlQS0PK8OS4dqcs/s3OhA1GPJ70emQ0bUk7Q==
 
-"@aztec/protocol-contracts@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/protocol-contracts/-/protocol-contracts-0.85.0.tgz#1264ef6d216ba0ce475aeea2905384c2a2929187"
-  integrity sha512-zHRF9tkcGUFFKqDpgqYedsSYVBNUrkh7LYd2eEdT6u2nRZaLnFiUIF8L73fC6jXhJNXrhHJs9VJEHbNsA+yeyg==
-  dependencies:
-    "@aztec/constants" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    "@aztec/stdlib" "0.85.0"
-    lodash.chunk "^4.2.0"
-    lodash.omit "^4.5.0"
-    tslib "^2.4.0"
-
 "@aztec/protocol-contracts@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/protocol-contracts/-/protocol-contracts-0.87.9.tgz#f0bbbbeb7a0769424e110a78426473daaa42284d"
@@ -300,27 +183,6 @@
     lodash.chunk "^4.2.0"
     lodash.omit "^4.5.0"
     tslib "^2.4.0"
-
-"@aztec/stdlib@0.85.0":
-  version "0.85.0"
-  resolved "https://registry.yarnpkg.com/@aztec/stdlib/-/stdlib-0.85.0.tgz#4e3f4cca7b2132f51d0cc8782e06d9b4150315f8"
-  integrity sha512-UoxYKVkB+L5lnpKXXHbGfB2ABWww2hMJO/3UH/hW+OXNyVVoEefWz33RWDE09mk1VKhpqP33K0cCmJcHbErACA==
-  dependencies:
-    "@aztec/bb.js" "0.85.0"
-    "@aztec/blob-lib" "0.85.0"
-    "@aztec/constants" "0.85.0"
-    "@aztec/ethereum" "0.85.0"
-    "@aztec/foundation" "0.85.0"
-    "@google-cloud/storage" "^7.15.0"
-    lodash.chunk "^4.2.0"
-    lodash.isequal "^4.5.0"
-    lodash.omit "^4.5.0"
-    lodash.times "^4.3.2"
-    msgpackr "^1.11.2"
-    pako "^2.1.0"
-    tslib "^2.4.0"
-    viem "2.23.7"
-    zod "^3.23.8"
 
 "@aztec/stdlib@0.87.9":
   version "0.87.9"
@@ -2383,74 +2245,74 @@
   resolved "https://registry.yarnpkg.com/@socket.io/component-emitter/-/component-emitter-3.1.2.tgz#821f8442f4175d8f0467b9daf26e3a18e2d02af2"
   integrity sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==
 
-"@swc/core-darwin-arm64@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.12.4.tgz#9bee8a60c32bfd8e8946953e2730c03cf43b3189"
-  integrity sha512-HihKfeitjZU2ab94Zf893sxzFryLKX0TweGsNXXOLNtkSMLw50auuYfpRM0BOL9/uXXtuCWgRIF6P030SAX5xQ==
+"@swc/core-darwin-arm64@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.12.5.tgz#edd39143c23989d28c641894656bc0fb4bcba019"
+  integrity sha512-3WF+naP/qkt5flrTfJr+p07b522JcixKvIivM7FgvllA6LjJxf+pheoILrTS8IwrNAK/XtHfKWYcGY+3eaA4mA==
 
-"@swc/core-darwin-x64@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.12.4.tgz#63cc2dbf073c8cdb8d8568e7ef86f01de2f0c3ec"
-  integrity sha512-meYCXHyYb6RDdu2N5PNAf0EelyxPBFhRcVo4kBFLuvuNb0m6EUg///VWy8MUMXq9/s9uzGS9kJVXXdRdr/d6FA==
+"@swc/core-darwin-x64@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.12.5.tgz#64b38d60d7857e4909ce20c2460f7f1bd2eb61a3"
+  integrity sha512-GCcD3dft8YN7unTBcW02Fx41jXp2MNQHCjx5ceWSEYOGvn7vBSUp7k7LkfTxGN5Ftxb9a1mxhPq8r4rD2u/aPw==
 
-"@swc/core-linux-arm-gnueabihf@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.12.4.tgz#3afbed124e4f512d2b781808d33648d538ff4b4b"
-  integrity sha512-szfDbf7mE8V64of0q/LSqbk+em+T+TD3uqnH40Z7Qu/aL8vi5CHgyLjWG2SLkLLpyjgkAUF6AKrupgnBYcC2NA==
+"@swc/core-linux-arm-gnueabihf@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.12.5.tgz#7d854ccef342f203f2b626d4f0a0427fb49dd094"
+  integrity sha512-jWlzP/Y4+wbE/EJM+WGIDQsklLFV3g5LmbYTBgrY4+5nb517P31mkBzf5y2knfNWPrL7HzNu0578j3Zi2E6Iig==
 
-"@swc/core-linux-arm64-gnu@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.12.4.tgz#d4237295be563e339a4f0a320d66e8d39a1971e0"
-  integrity sha512-n0IY76w+Scx8m3HIVRvLkoResuwsQgjDfAk9bxn99dq4leQO+mE0fkPl0Yw/1BIsPh+kxGfopIJH9zsZ1Z2YrA==
+"@swc/core-linux-arm64-gnu@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.12.5.tgz#fa716a501c5e55658f4acada38d7d5bbc3872d37"
+  integrity sha512-GkzgIUz+2r6J6Tn3hb7/4ByaWHRrRZt4vuN9BLAd+y65m2Bt0vlEpPtWhrB/TVe4hEkFR+W5PDETLEbUT4i0tQ==
 
-"@swc/core-linux-arm64-musl@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.12.4.tgz#a422d42c1c6cbf771ad2d0c11c6e230b8429b383"
-  integrity sha512-wE5jmFi5cEQyLy8WmCWmNwfKETrnzy2D8YNi/xpYWpLPWqPhcelpa6tswkfYlbsMmmOh7hQNoTba1QdGu0jvHQ==
+"@swc/core-linux-arm64-musl@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.12.5.tgz#6db1f468373c89521b4e0ce290c1bf4098bf9219"
+  integrity sha512-g0AJ7QmZPj3Uw+C5pDa48LAUG7JBgQmB0mN5cW+s2mjaFKT0mTSxYALtx/MDZwJExDPo0yJV8kSbFO1tvFPyhg==
 
-"@swc/core-linux-x64-gnu@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.12.4.tgz#d0e25c6573366d985e5dffd029a32a6a99b81581"
-  integrity sha512-6S50Xd/7ePjEwrXyHMxpKTZ+KBrgUwMA8hQPbArUOwH4S5vHBr51heL0iXbUkppn1bkSr0J0IbOove5hzn+iqQ==
+"@swc/core-linux-x64-gnu@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.12.5.tgz#0f7de6a7a40002b37c233a7d5e55bff78d38ba70"
+  integrity sha512-PeYoSziNy+iNiBHPtAsO84bzBne/mbCsG5ijYkAhS1GVsDgohClorUvRXXhcUZoX2gr8TfSI9WLHo30K+DKiHg==
 
-"@swc/core-linux-x64-musl@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.12.4.tgz#2a43402f59350c271bd2ccf6de6fcc263e48ef8f"
-  integrity sha512-hbYRyaHhC13vYKuGG5BrAG5fjjWEQFfQetuFp/4QKEoXDzdnabJoixxWTQACDL3m0JW32nJ+gUzsYIPtFYkwXg==
+"@swc/core-linux-x64-musl@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.12.5.tgz#d42a225d2fb8faed402fbea1871f7e230d1b3752"
+  integrity sha512-EJrfCCIyuV5LLmYgKtIMwtgsnjVesdFe0IgQzEKs9OfB6cL6g7WO9conn8BkGX8jphVa7jChKxShDGkreWWDzA==
 
-"@swc/core-win32-arm64-msvc@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.12.4.tgz#024dac6fa7401d6f4e51c5d1e9f75b05c3dddad5"
-  integrity sha512-e6EbfjPL8GA/bb1lc9Omtxjlz+1ThTsAuBsy4Q3Kpbuh6B3jclg8KzxU/6t91v23wG593mieTyR5f3Pr7X3AWw==
+"@swc/core-win32-arm64-msvc@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.12.5.tgz#fb4db0bbe28b88a1d8b7a7c01bc53ef1e4b03daa"
+  integrity sha512-FnwT7fxkJJMgsfiDoZKEVGyCzrPFbzpflFAAoTCUCu3MaHw6mW55o/MAAfofvJ1iIcEpec4o93OilsmKtpyO5Q==
 
-"@swc/core-win32-ia32-msvc@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.12.4.tgz#a2d7aeb01efb4ee647e34de76011284abf1ec79d"
-  integrity sha512-RG2FzmllBTUf4EksANlIvLckcBrLZEA0t13LIa6L213UZKQfEuDNHezqESgoVhJMg2S/tWauitATOCFgZNSmjg==
+"@swc/core-win32-ia32-msvc@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.12.5.tgz#53a0118673c5c2532290b97b09186dc22d75e3ec"
+  integrity sha512-jW6l4KFt9mIXSpGseE6BQOEFmbIeXeShDuWgldEJXKeXf/uPs8wrqv80XBIUwVpK0ZbmJwPQ0waGVj8UM3th2Q==
 
-"@swc/core-win32-x64-msvc@1.12.4":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.12.4.tgz#9833ed3c5afd22cfe37ff248aad275fd579ab985"
-  integrity sha512-oRHKnZlR83zaMeVUCmHENa4j5uNRAWbmEpjYbzRcfC45LPFNWKGWGAGERLx0u87XMUtTGqnVYxnBTHN/rzDHOw==
+"@swc/core-win32-x64-msvc@1.12.5":
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.12.5.tgz#00f34e23c28fb21d8c502bbfab09ecc3c31599cf"
+  integrity sha512-AZszwuEjlz1tSNLQRm3T5OZJ5eebxjJlDQnnzXJmg0B7DJMRoaAe1HTLOmejxjFK6yWr7fh+pSeCw2PgQLxgqA==
 
 "@swc/core@^1.11.31":
-  version "1.12.4"
-  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.12.4.tgz#23e7505433c763d3a7e90b0e05a1b7dff47fd398"
-  integrity sha512-hn30ebV4njAn0NAUM+3a0qCF+MJgqTNSrfA/hUAbC6TVjOQy2OYGQwkUvCu/V7S2+rZxrUsTpKOnZ7qqECZV9Q==
+  version "1.12.5"
+  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.12.5.tgz#f89ccdd66df7379aea3225f88a73e56031c820ae"
+  integrity sha512-KxA0PHHIuUBmQ/Oi+xFpVzILj2Oo37sTtftCbyowQlyx5YOknEOw1kLpas5hMcpznXgFyAWbpK71xQps4INPgA==
   dependencies:
     "@swc/counter" "^0.1.3"
     "@swc/types" "^0.1.23"
   optionalDependencies:
-    "@swc/core-darwin-arm64" "1.12.4"
-    "@swc/core-darwin-x64" "1.12.4"
-    "@swc/core-linux-arm-gnueabihf" "1.12.4"
-    "@swc/core-linux-arm64-gnu" "1.12.4"
-    "@swc/core-linux-arm64-musl" "1.12.4"
-    "@swc/core-linux-x64-gnu" "1.12.4"
-    "@swc/core-linux-x64-musl" "1.12.4"
-    "@swc/core-win32-arm64-msvc" "1.12.4"
-    "@swc/core-win32-ia32-msvc" "1.12.4"
-    "@swc/core-win32-x64-msvc" "1.12.4"
+    "@swc/core-darwin-arm64" "1.12.5"
+    "@swc/core-darwin-x64" "1.12.5"
+    "@swc/core-linux-arm-gnueabihf" "1.12.5"
+    "@swc/core-linux-arm64-gnu" "1.12.5"
+    "@swc/core-linux-arm64-musl" "1.12.5"
+    "@swc/core-linux-x64-gnu" "1.12.5"
+    "@swc/core-linux-x64-musl" "1.12.5"
+    "@swc/core-win32-arm64-msvc" "1.12.5"
+    "@swc/core-win32-ia32-msvc" "1.12.5"
+    "@swc/core-win32-x64-msvc" "1.12.5"
 
 "@swc/counter@^0.1.3":
   version "0.1.3"
@@ -3596,7 +3458,7 @@ available-typed-arrays@^1.0.7:
   dependencies:
     possible-typed-array-names "^1.0.0"
 
-axios@^1.7.2, axios@^1.8.2, axios@^1.9.0:
+axios@^1.8.2, axios@^1.9.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.10.0.tgz#af320aee8632eaf2a400b6a1979fa75856f38d54"
   integrity sha512-/1xYAC4MP/HEG+3duIhFr4ZQXR4sQXOIe+o6sdqzeykGLx6Upp/1p8MHqhINOvGeP7xyNHe7tsiJByc4SSVUxw==

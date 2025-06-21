@@ -34,7 +34,7 @@ import {
   type U128Like,
   type WrappedFieldLike,
 } from '@aztec/aztec.js';
-import ZeroBotContractArtifactJson from '../../target/ZeroBot-ZeroBot.json' with { type: 'json' };
+import ZeroBotContractArtifactJson from '../target/ZeroBot-ZeroBot.json' with { type: 'json' };
 export const ZeroBotContractArtifact = loadContractArtifact(ZeroBotContractArtifactJson as NoirCompiledContract);
 
 

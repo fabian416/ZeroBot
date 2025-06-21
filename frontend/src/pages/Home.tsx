@@ -8,9 +8,8 @@ import {
   AztecAddress,
 } from '@aztec/aztec.js';
 import { getDeployedTestAccountsWallets } from '@aztec/accounts/testing';
-import { ZeroBotContract } from '../../public/artifacts/ZeroBot';
+import { ZeroBotContract, ZeroBotContractArtifact } from '../../artifacts/ZeroBot';
 import { PXE_URL } from '../utils/constants';
-
 
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
@@ -27,14 +26,17 @@ export default function Home() {
 
   const deployContract = async () => {
     const pxe = createPXEClient(PXE_URL);
+    await pxe.registerContractClass(ZeroBotContractArtifact);
     const [wallet] = await getDeployedTestAccountsWallets(pxe);
+    const tx = ZeroBotContract.deploy(wallet).send();
+    await tx.wait();
+    const deployed = await tx.deployed();
+    await pxe.registerContract({
+      instance: deployed.instance,
+      artifact: ZeroBotContractArtifact
+    });
 
-    const deployedContract = await ZeroBotContract.deploy(wallet)
-    .send()
-    .deployed();
-    console.log(deployedContract)
-
-    const contractAddress = deployedContract.address.toString();
+    const contractAddress = deployed.address.toString();
     console.log(`✅ Identity Contract deployed at ${contractAddress}`);
 
     return { contractAddress };
