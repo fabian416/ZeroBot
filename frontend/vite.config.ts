@@ -21,9 +21,11 @@ export default defineConfig({
   preview: {
     host: '0.0.0.0',
     port: 3002,
+    allowedHosts: ['zero-bot.aichallenge.fun'],
   },
   server: {
     host: '0.0.0.0',
     port: 3002,
+    allowedHosts: ['zero-bot.aichallenge.fun'],
   }
 })
