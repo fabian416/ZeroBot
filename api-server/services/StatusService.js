@@ -5,15 +5,16 @@ export class StatusService {
         this.statusRepository = statusRepository;
     }
 
-    async createStatus(data) {
+    async createStatus(userId, guildId) {
         // sweet business logic
         const metadata = {
-            ...data,
-            status: data.status || 'pending',
+            userId,
+            guildId,
+            status: 'pending',
             lastUpdated: new Date().toISOString(),
         };
 
-        removeNewUserRole()
+        removeNewUserRole(userId, guildId, true)
     
         return this.statusRepository.save(metadata);
     }

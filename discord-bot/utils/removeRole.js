@@ -6,8 +6,6 @@ async function removeNewUserRole(userId, guildId, shouldRemove) {
             return { success: false, message: 'Role removal not requested' };
         }
 
-        console.log("bot", bot)
-
         const guild = bot.guilds.cache.get(guildId);
         if (!guild) {
             return { success: false, message: 'Guild not found' };

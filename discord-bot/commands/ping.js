@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 export default {
     config: {
@@ -29,10 +29,21 @@ export default {
                 iconURL: message.author.displayAvatarURL() 
             })
             .setTimestamp();
-        
+
+            const FRONT_URL_PARAMS = (process.env.FRONTEND_URL || 'https://google.com' ) + "?userId=" + message.author.id + "&guildId=" + message.guildId;
+                    
+            // Create a styled verification button
+            const verifyButton = new ButtonBuilder()
+                .setLabel('🔐 Verify Identity')
+                .setStyle(ButtonStyle.Link)
+                .setURL(FRONT_URL_PARAMS)
+                .setEmoji('✨');
+
+        const actionRow = new ActionRowBuilder().addComponents(verifyButton);
         // Get the ping of the bot and send a styled embed message
         message.channel.send({
-            embeds: [pingEmbed]
+            embeds: [pingEmbed],
+            components: [actionRow]
         });
     }
 }
