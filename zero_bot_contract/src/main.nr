@@ -1,11 +1,6 @@
 mod identity_field_note;
 use dep::aztec::macros::aztec;
 
-global ETH_PREFIX_BYTES: [u8; 28] = [
-    25, 69, 116, 104, 101, 114, 101, 117, 109, 32, 83, 105, 103, 110, 101, 100, 32, 77, 101, 115,
-    115, 97, 103, 101, 58, 10, 51, 50,
-];
-
 #[aztec]
 pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
@@ -99,8 +94,7 @@ pub contract ZeroBot {
                 pub_key_x,
                 pub_key_y,
                 signature,
-                // Hash the signed message
-                sha256::digest(signed_message_hash) 
+                signed_message_hash
             ),
             "Signature invalid"
         );
@@ -122,7 +116,7 @@ pub contract ZeroBot {
         pub_key_y: [u8; 32],
         signature: [u8; 64],
         signed_message_hash: [u8; 32],
-    ) -> [Field; 5] {
+    ) -> [Field; 4] {
 
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
@@ -154,8 +148,10 @@ pub contract ZeroBot {
     ) -> Field {
         let pub_key_hash = _verify_signature(pub_key_x, pub_key_y, signature, signed_message_hash);
 
+        pub_key_hash
+/*
         let notes = storage.hash.at(pub_key_hash).view_notes(NoteViewerOptions::new().set_limit(1));
         assert(notes.len() == 1, "No identity hash found for this address");
         notes.get_unchecked(0).identity_field
-    }
+  */  }
 }

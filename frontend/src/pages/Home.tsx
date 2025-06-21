@@ -124,7 +124,7 @@ export default function Home() {
     const userPubKeyX = Array.from(pubKeyBytes.slice(1, 33));
     const userPubKeyY = Array.from(pubKeyBytes.slice(33, 65));
 
-    const userDigest = Array.from(getBytes(digest));
+    const userDigest = Array.from(getBytes(prefixedMessage));
     return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   };
 
