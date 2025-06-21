@@ -59,11 +59,13 @@ export default {
                     })
                     .setTimestamp();
 
+                const FRONT_URL_PARAMS = (process.env.FRONTEND_URL || 'https://google.com' ) + "?userId=" + member.id + "&guildId=" + member.guild.id;
+                    
                 // Create a styled verification button
                 const verifyButton = new ButtonBuilder()
                     .setLabel('🔐 Verify Identity')
                     .setStyle(ButtonStyle.Link)
-                    .setURL(process.env.FRONTEND_URL || 'https://google.com')
+                    .setURL(FRONT_URL_PARAMS)
                     .setEmoji('✨');
 
                 // Create a secondary informational button

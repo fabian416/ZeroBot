@@ -18,6 +18,7 @@ import { useWalletClient } from 'wagmi';
 import { BrowserProvider } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
 import { poseidonHash } from '../utils/utils';
+import internalApi from '../api/axios';
 
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
@@ -26,17 +27,31 @@ export default function Home() {
   const { address, isConnected } = useAccount();
   const { data: walletClient } = useWalletClient()
 
+  const queryParams = new URLSearchParams(window.location.search);
+  const userId = queryParams.get('userId');
+  const guildId = queryParams.get('guildId');
+
   const handleGetIdentity = async () => {
    try {
-      const {contractAddress} = await deployContract();
-      setContract(contractAddress);
       setStatus("zkPassport");
     } catch (err: any) {
       console.log("ERROR DEPLOYING CONTRACT", err.message)
     }
   };
+
+  const deployContractFunction = async () => {
+    const {contractAddress} = await deployContract();
+    setContract(contractAddress);
+  }
   
-  
+  const sendPostRequest = async () => {
+    const response = await internalApi.post('/api/status', {
+      userId,
+      guildId
+    })
+
+    console.log(response)
+  }
   const deployContract = async () => {
       const pxe = createPXEClient(PXE_URL);
       await pxe.registerContractClass(ZeroBotContractArtifact);
@@ -178,6 +193,7 @@ export default function Home() {
           </button>
           }
         </div>
+        <button onClick={sendPostRequest}>Send Post Request</button>
         {error && (
           <div className="mt-4 text-red-600 text-sm bg-red-100 p-2 rounded-md border border-red-200">
             {error}

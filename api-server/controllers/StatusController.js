@@ -6,9 +6,9 @@ export class StatusController {
 
     async update(req, res) {
         try {
-            const body = await req.json();
-            const { status, message } = this.statusService.createStatus(body);
-            return Response.json({ body }, { status: 200 });
+            const {userId, guildId} = await req.json();
+            const result = await this.statusService.createStatus(userId, guildId);
+            return Response.json(result, { status: 200 });
 
         } catch (error) {
             console.error('Error updating status:', error);
