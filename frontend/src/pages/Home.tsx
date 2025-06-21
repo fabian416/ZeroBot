@@ -3,15 +3,70 @@ import { useAccount } from 'wagmi'
 import * as circomlib from 'circomlibjs';
 import ZKPassportComponent from '../components/zkPassport/zkPassport';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import {
+  createPXEClient,
+  AztecAddress,
+} from '@aztec/aztec.js';
+import { getDeployedTestAccountsWallets } from '@aztec/accounts/testing';
+import { ZeroBotContract } from '../../public/artifacts/ZeroBot';
+import { PXE_URL } from '../utils/constants';
+
 
 export default function Home() {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
   const { address, isConnected } = useAccount();
 
-  const handleGetIdentity = () => {
-    setStatus("zkPassport");
+  const handleGetIdentity = async () => {
+    //setStatus("zkPassport");
+
+    const {contractAddress} = await deployContract();
+    await createIdentity(contractAddress);
+    await getPrivateIdentity(contractAddress);
   };
+
+  const deployContract = async () => {
+    const pxe = createPXEClient(PXE_URL);
+    const [wallet] = await getDeployedTestAccountsWallets(pxe);
+
+    const deployedContract = await ZeroBotContract.deploy(wallet)
+    .send()
+    .deployed();
+    console.log(deployedContract)
+
+    const contractAddress = deployedContract.address.toString();
+    console.log(`✅ Identity Contract deployed at ${contractAddress}`);
+
+    return { contractAddress };
+  }
+
+  const createIdentity = async (contract: string) => {
+      const pxe = createPXEClient(PXE_URL);
+      const [wallet1, wallet2] = await getDeployedTestAccountsWallets(pxe);
+  
+      const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet1);
+      const tx = zeroBot.methods
+        .create_identity(BigInt(2), BigInt(2), BigInt(2), BigInt(2), BigInt(2))
+        .send();
+  
+      const txHash = await tx.getTxHash();
+      console.log(`🚀 Create Identity TX sent: ${txHash.toString()}`);
+      await tx.wait();
+      console.log('✅ Create Identity confirmed!');
+  
+      return { txHash: txHash.toString() };
+  }
+
+  const getPrivateIdentity = async (contract: string) => {
+    const pxe = createPXEClient(PXE_URL);
+    const [wallet] = await getDeployedTestAccountsWallets(pxe);
+    const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
+
+    const result = await zeroBot.methods.get_identity(BigInt(2)).simulate({});
+    
+    console.log(result);
+  }
+  
 
   return (
     <div className="flex flex-1 flex-col justify-center items-center w-full bg-gradient-to-b from-gray-50 to-gray-100 px-4">
