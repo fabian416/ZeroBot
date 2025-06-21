@@ -10,7 +10,7 @@ global ETH_PREFIX_BYTES: [u8; 28] = [
 pub contract ZeroBot {
     use crate::identity_field_note::IdentityFieldNote;
     use dep::aztec::{
-        macros::{functions::{initializer, public}, storage::storage},
+        macros::{functions::{initializer, public, private}, storage::storage},
         prelude::{AztecAddress, PublicImmutable, Map, PrivateSet},
     };
 
@@ -28,42 +28,25 @@ pub contract ZeroBot {
     fn constructor() {
         // Nothing to initialize yet
     }
-    /*
+    
     // Create a new identity
     #[private]
     fn create_identity(
-        user_pub_key_x: [u8; 32],
-        user_pub_key_y: [u8; 32],
-        user_signature: [u8; 64],
-        nonce_hash: Field,
-        timestamp_hash: Field,
+        ethAddress: Field,
+        hash: Field,
         name: Field,
         last_name: Field,
         document_type: Field,
         document_number: Field,
     ) {
-        let signed_user_hash = unsafe { compute_user_hash(nonce_hash, timestamp_hash) };
+        storage.hash.at(ethAddress).add(IdentityFieldNote::new(hash, context.msg_sender()));
+        storage.name.at(ethAddress).add(IdentityFieldNote::new(name, context.msg_sender()));
+        storage.last_name.at(ethAddress).add(IdentityFieldNote::new(last_name, context.msg_sender()));
+        storage.document_type.at(ethAddress).add(IdentityFieldNote::new(document_type, context.msg_sender()));
+        storage.document_number.at(ethAddress).add(IdentityFieldNote::new(document_number, context.msg_sender()));
 
-        // Recover the user's Ethereum address from their public key and signature over their identity hash.
-        // This shows that the user claims ownership of a particular address (e.g., for KYC or eligibility proofs).
-        let user_addr = ecrecover(
-            user_pub_key_x,
-            user_pub_key_y,
-            user_signature,
-            signed_user_hash,
-        );
-
-        let hash = poseidon::bn254::hash_1([document_number]);
-
-        assert(!storage.identity.at(user_addr).is_initialized(), "Identity already registered");
-        storage.identity.at(user_addr).write(Identity {
-            hash,
-            name,
-            last_name,
-            document_type,
-            document_number
-        });
     }
+    /*
     // Retrieve the Identity
     #[public]
     fn get_identity(identity_hash: Field) -> AztecAddress {
