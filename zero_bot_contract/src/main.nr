@@ -6,7 +6,6 @@ use dep::aztec::{
     macros::{functions::{initializer, public}, storage::storage},
     prelude::{AztecAddress, PublicImmutable, Map}
 };
-use dep::ecrecover::ecrecover;
 use std::hash::poseidon;
 
 global ETH_PREFIX_BYTES: [u8; 28] = [
