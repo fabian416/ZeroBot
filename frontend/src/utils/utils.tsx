@@ -37,7 +37,7 @@ export const poseidonHash = async (value1: string, value2: any) => {
 
 export async function registerZeroBotContract(pxe: any) {
   const contractAddr = AztecAddress.fromString(import.meta.env.VITE_PUBLIC_CONTRACT_ADDRESS!);
-
+    
     await pxe.registerContract({
         artifact: ZeroBotContractArtifact,
         portalContract: EthAddress.ZERO,
@@ -56,13 +56,18 @@ export async function getDeployerWalletFromEnv(pxe: any) {
         throw new Error("SECRET or SALT not set in .env file.");
     }
 
+    console.log("a")
+
     const secretKey = Fr.fromString(secret); 
+    console.log("b")
     const saltKey = Fr.fromString(salt);
+    console.log("c")
     const adminAddress = AztecAddress.fromString(admin);
     // Derivamos la signingKey a partir de la secretKey
     const signingKey = deriveSigningKey(secretKey);
-
+    console.log("d")
     const wallet = await getSchnorrWalletWithSecretKey(pxe, secretKey, signingKey, saltKey);
+    console.log("e")
     console.log(wallet.getAddress());
     return wallet;
 }

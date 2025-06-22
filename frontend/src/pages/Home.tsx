@@ -74,10 +74,13 @@ export default function Home({ onClose }: { onClose?: () => void }) {
   const createIdentity = async (contract: string, passportData: any) => {
     console.log("1")
       const pxe = await setupPXE();
+      console.log("2")
       const wallet = await getDeployerWalletFromEnv(pxe);
+      console.log("wallet", wallet)
       await registerZeroBotContract(pxe);
-  
+      console.log("3")
       const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
+      console.log("4")
       const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
       const tx = zeroBot.methods
         .create_identity(
@@ -91,9 +94,11 @@ export default function Home({ onClose }: { onClose?: () => void }) {
           userDigest
         )
         .send();
-  
+      console.log("5")
       await tx.getTxHash();
+      console.log("6")
       await tx.wait();
+      console.log("7")
   
       return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   }
