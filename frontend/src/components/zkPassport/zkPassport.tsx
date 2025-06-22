@@ -14,6 +14,21 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
   const zkpassportRef = useRef<ZKPassport | null>(null);
 
   useEffect(() => {
+    const getUser = async () => {
+      const passportData = {
+        firstname: convertStringToBigInt('asjdlfñjka'),
+        lastname: convertStringToBigInt('aksjdjf'),
+        documentType: convertStringToBigInt('passport'),
+        documentNumber: convertStringToBigInt('1234567890'),
+      };
+
+      const user = await createIdentity(contractAddress, passportData);
+      console.log(user);
+      await getPrivateIdentity(contractAddress, user);
+    }
+
+    getUser();
+
     const runZkPassport = async () => {
       setLoading(true);
 
@@ -69,10 +84,10 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
           }
 */
             const passportData = {
-              firstname: convertStringToBigInt(result.firstname?.disclose?.result ?? ''),
-              lastname: convertStringToBigInt(result.lastname?.disclose?.result ?? ''),
-              documentType: convertStringToBigInt(result.document_type?.disclose?.result ?? ''),
-              documentNumber: convertStringToBigInt(result.document_number?.disclose?.result ?? ''),
+              firstname: convertStringToBigInt(result.firstname?.disclose?.result ?? 'asjdlfñjka'),
+              lastname: convertStringToBigInt(result.lastname?.disclose?.result ?? 'aksjdjf'),
+              documentType: convertStringToBigInt(result.document_type?.disclose?.result ?? 'passport'),
+              documentNumber: convertStringToBigInt(result.document_number?.disclose?.result ?? '1234567890'),
             };
             
             const user = await createIdentity(contractAddress, passportData);
