@@ -5,10 +5,6 @@ A ZK-based Discord verification bot: prove you're human once, and verify everywh
 
 ![Diagram](docs/diagram.png)
 
-<p align="center">
-  <img src="frontend/public/landing.png" alt="ZeroBot Screenshot" style="max-width: 100%; border-radius: 12px;" />
-</p>
-
 ## 🔍 What It Does
 
 ZeroBot allows Discord users to privately prove they're human using Zero-Knowledge (ZK) proofs. Once verified, users can access any server or channel across the platform, without ever having to deal with CAPTCHAs again.
