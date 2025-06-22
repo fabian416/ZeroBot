@@ -4,14 +4,14 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit'
 import { WagmiProvider } from 'wagmi'
-import { arbitrum } from 'wagmi/chains'
+import { baseSepolia } from 'wagmi/chains'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
 
 const config = getDefaultConfig({
   appName: 'ZeroBot',
   projectId: '8b1988f17923eace8f1ac14141db22a5',
-  chains: [arbitrum],
+  chains: [baseSepolia],
   ssr: false,
 })
 

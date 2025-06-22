@@ -20,6 +20,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getDeployerWalletFromEnv, poseidonHash, registerZeroBotContract } from '../utils/utils';
 import internalApi from '../api/axios';
 import { contractAddress } from '../utils/utils';
+import ProofGeneration from '../components/ProofGeneration';
 
 export default function Home({ onClose }: { onClose?: () => void }) {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
@@ -183,6 +184,7 @@ export default function Home({ onClose }: { onClose?: () => void }) {
             <p className="text-purple-200/90 text-center font-medium mb-4">
               Privately prove you're not a bot to join the Discord server
             </p>
+            <ProofGeneration />
             <div className="w-full flex flex-col items-center">
               {!isConnected ? (
                 <div className="glass-effect p-4 rounded-xl border border-purple-500/30 w-full">
@@ -211,8 +213,6 @@ export default function Home({ onClose }: { onClose?: () => void }) {
                 </button>
               )}
             </div>
-              {//  <button onClick={sendPostRequest}>Send Post Request</button>
-              }
           {error && (
             <div className="mt-4 bg-red-500/10 border border-red-500/30 text-red-300 p-3 rounded-xl backdrop-blur-sm w-full text-center">
               <div className="flex items-center gap-2 justify-center">
