@@ -88,9 +88,11 @@ export default function Home({ onClose }: { onClose?: () => void }) {
   }*/
 
   const createIdentity = async (contractAdd: string, passportData: any) => {
+    setStatus("challenge")
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
     console.log("llego aca")
     sendPostRequest()
+    setStatus("finish")
     return
     const tx = contract.methods
       .create_identity(
@@ -201,25 +203,43 @@ export default function Home({ onClose }: { onClose?: () => void }) {
                   <ConnectButton showBalance={false} />
                 </div>
               ) : (
-                <button
-                  onClick={handleGetIdentity}
-                  disabled={(status !== "idle" && status !== "finish") || !address}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-xl text-base transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 shadow-lg border border-purple-400/30 mt-2"
-                >
-                  {status !== 'idle' && status !== 'finish' && (
-                    <div className="loading-spinner" />
+                <>
+                  {status === "finish" ? (
+                    <div className="p-4 mx-auto w-full flex flex-col items-center">
+                      <div className="bg-green-500/10 border border-green-500/30 text-green-300 p-4 rounded-xl backdrop-blur-sm w-full text-center mb-4">
+                        <div className="flex items-center gap-2 justify-center mb-2">
+                          <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span className="font-semibold text-lg">Success!</span>
+                        </div>
+                        <p className="text-green-200 font-medium">
+                          You have been successfully verified! You can go back to Discord.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleGetIdentity}
+                      disabled={(status !== "idle") || !address}
+                      className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-3 px-6 rounded-xl text-base transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 shadow-lg border border-purple-400/30 mt-2"
+                    >
+                      {status !== 'idle' && (
+                        <div className="loading-spinner" />
+                      )}
+                      <span className="font-semibold">
+                        {{
+                          idle: 'Get Identity',
+                          getting: 'Fetching identity...',
+                          challenge: 'Verifying account ownership...',
+                          zkPassport: 'Verifying zkPassport...',
+                          creating: 'Creating identity...',
+                          finish: 'Done!'
+                        }[status]}
+                      </span>
+                    </button>
                   )}
-                  <span className="font-semibold">
-                    {{
-                      idle: 'Get Identity',
-                      getting: 'Fetching identity...',
-                      challenge: 'Verifying account ownership...',
-                      zkPassport: 'Verifying zkPassport...',
-                      creating: 'Creating identity...',
-                      finish: 'Done!'
-                    }[status]}
-                  </span>
-                </button>
+                </>
               )}
             </div>
           {error && (
