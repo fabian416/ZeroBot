@@ -1,5 +1,5 @@
 import routes from './routes/routes.js';
-import { handleCors, getCorsHeaders } from './middleware/cors.js';
+import { getCorsHeaders } from './middleware/cors.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 Bun.serve({
@@ -8,20 +8,25 @@ Bun.serve({
   fetch: async (req) => {
     const url = new URL(req.url);
     const path = url.pathname;
+
+    // Handle CORS preflight requests
+    const origin = req.headers.get("Origin");
+
+    if (req.method === "OPTIONS") {
+      return new Response("OK", {
+        headers: getCorsHeaders(origin)
+      });
+    }
     
     // Check if route exists
     if (routes.routes[path] && routes.routes[path][req.method]) {
-      try {
-        const res = await routes.routes[path][req.method](req);
-        return handleCors(req, res);
-      } catch (error) {
-        errorHandler(error, req);
-      }
+      const response = await routes.routes[path][req.method](req, new Response());
+      const corsHeaders = getCorsHeaders(origin);
+      Object.entries(corsHeaders).forEach(([key, value]) => {
+        response.headers.set(key, value);
+      });
+      return response;
     }
-    
-    const notFoundError = new Error("Route not found");
-    notFoundError.name = "NotFoundError";
-    return errorHandler(notFoundError);
   },
   
   error: errorHandler
