@@ -74,7 +74,7 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
               documentType: convertStringToBigInt(result.document_type?.disclose?.result ?? ''),
               documentNumber: convertStringToBigInt(result.document_number?.disclose?.result ?? ''),
             };
-            console.log(passportData);
+            
             const user = await createIdentity(contractAddress, passportData);
             console.log(user);
             await getPrivateIdentity(contractAddress, user);

@@ -8,6 +8,14 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       target: 'esnext',
+      define: {
+        global: 'window',
+      },
+    },
+  },
+  resolve: {
+    alias: {
+      'util': 'rollup-plugin-node-polyfills/polyfills/util'
     },
   },
   build: {

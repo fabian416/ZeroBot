@@ -13,12 +13,13 @@ import {
 } from 'ethers'
 import { getDeployedTestAccountsWallets } from '@aztec/accounts/testing';
 import { ZeroBotContract, ZeroBotContractArtifact } from '../../artifacts/ZeroBot';
-import { PXE_URL } from '../utils/constants';
+import { setupPXE } from '../utils/setupPXE';
 import { useWalletClient } from 'wagmi';
 import { BrowserProvider } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
-import { poseidonHash } from '../utils/utils';
+import { getDeployerWalletFromEnv, poseidonHash, registerZeroBotContract } from '../utils/utils';
 import internalApi from '../api/axios';
+import { contractAddress } from '../utils/utils';
 
 export default function Home({ onClose }: { onClose?: () => void }) {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
@@ -33,18 +34,13 @@ export default function Home({ onClose }: { onClose?: () => void }) {
 
   const handleGetIdentity = async () => {
    try {
-      await deployContractFunction();
+      setContract(contractAddress);
       setStatus("zkPassport");
     } catch (err: any) {
       console.log("ERROR DEPLOYING CONTRACT", err.message)
     }
   };
 
-  const deployContractFunction = async () => {
-    const {contractAddress} = await deployContract();
-    setContract(contractAddress);
-  }
-  
   const sendPostRequest = async () => {
     const response = await internalApi.post('/api/status', {
       userId,
@@ -53,6 +49,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
 
     console.log(response)
   }
+
+  /*
   const deployContract = async () => {
       const pxe = createPXEClient(PXE_URL);
       await pxe.registerContractClass(ZeroBotContractArtifact);
@@ -70,11 +68,13 @@ export default function Home({ onClose }: { onClose?: () => void }) {
 
       return { contractAddress };
  
-  }
+  }*/
 
   const createIdentity = async (contract: string, passportData: any) => {
-      const pxe = createPXEClient(PXE_URL);
-      const [wallet] = await getDeployedTestAccountsWallets(pxe);
+    console.log("1")
+      const pxe = await setupPXE();
+      const wallet = await getDeployerWalletFromEnv(pxe);
+      await registerZeroBotContract(pxe);
   
       const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
       const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
@@ -91,7 +91,7 @@ export default function Home({ onClose }: { onClose?: () => void }) {
         )
         .send();
   
-      const txHash = await tx.getTxHash();
+      await tx.getTxHash();
       await tx.wait();
   
       return { userSignature, userPubKeyX, userPubKeyY, userDigest };
@@ -144,8 +144,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
 
   const getPrivateIdentity = async (contract: string, user: any) => {
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = user;
-    const pxe = createPXEClient(PXE_URL);
-    const [wallet] = await getDeployedTestAccountsWallets(pxe);
+    const pxe = setupPXE();
+    const wallet = await getDeployerWalletFromEnv(pxe);
     const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
 
     const result = await zeroBot.methods.get_identity(
