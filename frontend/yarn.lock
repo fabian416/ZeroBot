@@ -240,6 +240,14 @@
   resolved "https://registry.yarnpkg.com/@aztec/noir-acvm_js/-/noir-acvm_js-0.87.9.tgz#4bb064f8a7cdfeb7ef94bcacf98370eb0c0e83d7"
   integrity sha512-aoWgNMMEHKU4fpn6+OGigUyaOqp8UyfNMlB2hz0g1AeOZ6hVq036v7nQv1McVxXOxcVzdD7Dpf1nG/eUABCpKg==
 
+"@aztec/noir-contracts.js@^0.87.9":
+  version "0.87.9"
+  resolved "https://registry.yarnpkg.com/@aztec/noir-contracts.js/-/noir-contracts.js-0.87.9.tgz#e8727b4b5c1e37b67efda5ff838099273d8148f3"
+  integrity sha512-OgsmlUOqeIBEgiWx2GivSihs/z56ft5nRiMYL+NNv/9LWG3B4H9JQ50eQV0xs2C1pILpfbTbEffLJ+A4ZOotaA==
+  dependencies:
+    "@aztec/aztec.js" "0.87.9"
+    tslib "^2.4.0"
+
 "@aztec/noir-noir_codegen@0.87.9":
   version "0.87.9"
   resolved "https://registry.yarnpkg.com/@aztec/noir-noir_codegen/-/noir-noir_codegen-0.87.9.tgz#0f5e14cd1e36452178176723afe1c11be3660cc8"
@@ -9637,6 +9645,7 @@ string-format@^2.0.0:
   integrity sha512-bbEs3scLeYNXLecRRuk6uJxdXUSj6le/8rNPHChIJTn2V79aXVTR1EH2OH5zLKKoz0V02fOUKZZcw01pLUShZA==
 
 "string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0:
+  name string-width-cjs
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -9740,6 +9749,7 @@ string_decoder@~1.1.1:
     safe-buffer "~5.1.0"
 
 "strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+  name strip-ansi-cjs
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==

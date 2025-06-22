@@ -37,11 +37,15 @@ export const poseidonHash = async (value1: string, value2: any) => {
 
 export async function registerZeroBotContract(pxe: any) {
   const contractAddr = AztecAddress.fromString(import.meta.env.VITE_PUBLIC_CONTRACT_ADDRESS!);
+  const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
+  const adminAddress = AztecAddress.fromString(admin);
+  const salt = import.meta.env.VITE_PUBLIC_WALLET_SALT;
+    const saltKey = Fr.fromString(salt);
 
     await pxe.registerContract({
         artifact: ZeroBotContractArtifact,
-        portalContract: EthAddress.ZERO,
-        contractAddress: contractAddr,
+        deployer: adminAddress,
+        deploymentSalt: saltKey,
     });
 
 

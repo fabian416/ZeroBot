@@ -13,6 +13,7 @@
     "@aztec/accounts": "^0.87.9",
     "@aztec/aztec.js": "^0.87.9",
     "@aztec/bb.js": "0.72.1",
+    "@aztec/noir-contracts.js": "^0.87.9",
     "@aztec/pxe": "^0.87.9",
     "@heroicons/react": "^2.2.0",
     "@monaco-editor/react": "^4.6.0",
