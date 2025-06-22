@@ -57,12 +57,12 @@ export async function getDeployerWalletFromEnv(pxe: any) {
 
 export const getInstance = async () => {
     const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
-    const salt = import.meta.env.VITE_PUBLIC_WALLET_SALT;
+    const salt = import.meta.env.VITE_PUBLIC_CONTRACT_SALT;
     const instance = getContractInstanceFromDeployParams(
-        ZeroBotContractArtifact, {
-        deployer: AztecAddress.fromString(admin),
-        constructorArgs: [AztecAddress.fromString(admin)],
-        salt: Fr.fromString(salt),
+            ZeroBotContractArtifact, {
+            deployer: AztecAddress.fromString(admin),
+            constructorArgs: [AztecAddress.fromString(admin)],
+            salt: Fr.fromString(salt),
         }
     );
     return instance;

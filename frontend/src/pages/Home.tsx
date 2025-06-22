@@ -84,7 +84,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
     const wallet = await getDeployerWalletFromEnv(pxe);
 
     const instance = await getInstance();
-
+    console.log(instance);
+    console.log(contract);
     await pxe.registerContract({ 
       instance, 
       artifact: ZeroBotContractArtifact,
