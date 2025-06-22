@@ -198,10 +198,9 @@ export default function Home({ onClose }: { onClose?: () => void }) {
             <p className="text-purple-200/90 text-center font-medium mb-4">
               Privately prove you're not a bot to join the Discord server
             </p>
-            <ProofGeneration />
             <div className="w-full flex flex-col items-center">
               {!isConnected ? (
-                <div className="glass-effect p-4 rounded-xl border border-purple-500/30 w-full">
+                <div className="p-4 mx-auto w-full flex flex-col items-center">
                   <p className="text-purple-200/80 mb-2 font-medium text-center">Connect your wallet to get started</p>
                   <ConnectButton showBalance={false} />
                 </div>
