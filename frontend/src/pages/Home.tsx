@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi'
 import * as circomlib from 'circomlibjs';
 import ZKPassportComponent from '../components/zkPassport/zkPassport';
@@ -26,11 +26,13 @@ import { contractAddress } from '../utils/utils';
 import ProofGeneration from '../components/ProofGeneration';
 import { getSponsoredFPCInstance } from "../utils/sponsored_fpc.js";
 import { SponsoredFPCContract } from "@aztec/noir-contracts.js/SponsoredFPC";
+import { setupZeroBotContract } from '../utils/setupZeroBotContract.js';
 
 export default function Home({ onClose }: { onClose?: () => void }) {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
   const [error, setError] = useState<string | null>(null)
-  const [contract, setContract] = useState<string | null>(null)
+  const [contract, setContract] = useState<any>(null);
+  const [sponsoredPaymentMethod, setSponsoredPaymentMethod] = useState<any>(null);
   const { address, isConnected } = useAccount();
   const { data: walletClient } = useWalletClient()
 
@@ -38,9 +40,18 @@ export default function Home({ onClose }: { onClose?: () => void }) {
   const userId = queryParams.get('userId');
   const guildId = queryParams.get('guildId');
 
+  useEffect(() => {
+    const init = async () => {
+      const { zeroBot, sponsoredPaymentMethod } = await setupZeroBotContract(contractAddress!);
+      console.log("z", zeroBot)
+      setContract(zeroBot);
+      setSponsoredPaymentMethod(sponsoredPaymentMethod);
+    }
+    init();
+  }, [])
+
   const handleGetIdentity = async () => {
    try {
-      setContract(contractAddress);
       setStatus("zkPassport");
     } catch (err: any) {
       console.log("ERROR DEPLOYING CONTRACT", err.message)
@@ -76,24 +87,10 @@ export default function Home({ onClose }: { onClose?: () => void }) {
  
   }*/
 
-  const createIdentity = async (contract: string, passportData: any) => {
-    const pxe = await setupPXE();
-    const sponsoredFPC = await getSponsoredFPCInstance();
-    await pxe.registerContract({ instance: sponsoredFPC, artifact: SponsoredFPCContract.artifact });
-    const sponsoredPaymentMethod = new SponsoredFeePaymentMethod(sponsoredFPC.address);
-    const wallet = await getDeployerWalletFromEnv(pxe);
-
-    const instance = await getInstance();
-    await pxe.registerContract({ 
-      instance, 
-      artifact: ZeroBotContractArtifact,
-      contractAddress: AztecAddress.fromString(contract),
-    });
-
-    const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
+  const createIdentity = async (contractAdd: string, passportData: any) => {
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
     console.log("llego aca")
-    const tx = zeroBot.methods
+    const tx = contract.methods
       .create_identity(
         passportData.firstname, 
         passportData.lastname,
@@ -105,9 +102,7 @@ export default function Home({ onClose }: { onClose?: () => void }) {
         userDigest
       )
       .send({ fee: { paymentMethod: sponsoredPaymentMethod } });
-  console.log("llego aca 2")
     await tx.wait();
-  console.log("llego aca 4")
     return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   }
 
@@ -156,11 +151,11 @@ export default function Home({ onClose }: { onClose?: () => void }) {
     return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   };
 
-  const getPrivateIdentity = async (contract: string, user: any) => {
+  const getPrivateIdentity = async (contractAdd: string, user: any) => {
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = user;
     const pxe = setupPXE();
     const wallet = await getDeployerWalletFromEnv(pxe);
-    const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
+    const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contractAdd), wallet);
 
     const result = await zeroBot.methods.get_identity(
       userPubKeyX,
@@ -177,7 +172,7 @@ export default function Home({ onClose }: { onClose?: () => void }) {
       <div className="relative w-full max-w-lg mx-auto p-0">
         {status === "zkPassport" ? (
           <ZKPassportComponent
-            contractAddress={contract}
+            contractAddress={contractAddress}
             createIdentity={createIdentity}
             getPrivateIdentity={() => {}}
             onClose={() => setStatus("idle")}
