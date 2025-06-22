@@ -91,6 +91,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
     setStatus("challenge")
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
     console.log("llego aca")
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    await sleep(5000);
     sendPostRequest()
     setStatus("finish")
     return

@@ -89,6 +89,12 @@ This contract ensures that user data is securely signed and stored privately whi
 
 ---
 
+### Testnet contract
+
+https://aztecscan.xyz/contracts/instances/0x041c7cda3bc6da6bdbd6eea1c3c3dbc01e7b5abc034e06d4157e745bbd5111f2
+
+---
+
 ## 🧱 Tech Stack
 
 - **Frontend**: React, Tailwind CSS
