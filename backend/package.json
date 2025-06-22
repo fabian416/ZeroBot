@@ -4,6 +4,11 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@aztec/accounts": "^0.87.9",
+    "@aztec/aztec.js": "^0.87.9",
+    "@aztec/kv-store": "^0.87.9",
+    "@aztec/noir-contracts.js": "^0.87.9",
+    "@aztec/pxe": "^0.87.9",
     "@sapphire/snowflake": "^3.5.5",
     "asynckit": "^0.4.0",
     "callsites": "^3.1.0",
