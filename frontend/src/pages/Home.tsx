@@ -90,6 +90,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
   const createIdentity = async (contractAdd: string, passportData: any) => {
     const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
     console.log("llego aca")
+    sendPostRequest()
+    return
     const tx = contract.methods
       .create_identity(
         passportData.firstname, 
