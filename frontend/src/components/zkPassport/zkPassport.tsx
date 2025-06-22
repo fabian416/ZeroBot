@@ -107,16 +107,16 @@ export default function ZKPassportComponent({onClose, contractAddress, createIde
   }
 
  return (
-    <div className="bg-white/95 text-gray-800 rounded-2xl shadow-2xl p-8 max-w-sm w-full relative neon-shadow flex flex-col items-center space-y-6">
+    <div className=" text-gray-800 rounded-2xl shadow-2xl p-6 max-w-lg w-full relative neon-shadow flex flex-col items-center space-y-4">
       <button
         onClick={onClose}
-        className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 text-2xl bg-transparent border-none outline-none p-2"
+        className="absolute top-3 right-3 text-gray-300 hover:text-gray-700 text-xl bg-transparent border-none outline-none p-2"
         aria-label="Close"
       >
         &times;
       </button>
 
-      <p className="text-center text-lg font-medium text-gray-700">
+      <p className="text-center text-md font-medium text-gray-300 pt-10">
         Since this is your first time using <strong>ZeroBot</strong>, we’ll verify your identity using <strong>zkPassport</strong>.
       </p>
 
