@@ -36,19 +36,19 @@ async function main() {
     const address = await accountManager.getAddress();
     logger.info(`✅ Account deployed successfully at: ${address}`);
 
-    // Deploy voting contract
+    // Deploy identity contract
     logger.info('🗳️  Starting Zero Bot contract deployment...');
-    logger.info(`📋 Admin address for voting contract: ${address}`);
+    logger.info(`📋 Admin address for identity contract: ${address}`);
     
     const deployTx = ZeroBotContract.deploy(wallet, address).send({
         fee: { paymentMethod: sponsoredPaymentMethod }
       });
     
     logger.info('⏳ Waiting for deployment transaction to be mined...');
-    const votingContract = await deployTx.deployed({ timeout: 120000 });
+    const identityContract = await deployTx.deployed({ timeout: 120000 });
     
     logger.info(`🎉 Zero Bot contract deployed successfully!`);
-    logger.info(`📍 Contract address: ${votingContract.address}`);
+    logger.info(`📍 Contract address: ${identityContract.address}`);
     logger.info(`👤 Admin address: ${address}`);
     
     // Verify deployment
@@ -56,7 +56,7 @@ async function main() {
     logger.info('🔍 Verifying contract deployment...');
     try {
     logger.info('🧪 Reading authorized address...');
-    const authorized = await votingContract.methods.get_authorized().simulate();
+    const authorized = await identityContract.methods.get_authorized().simulate();
     logger.info(`✅ Authorized address: ${authorized.toString()}`);
     } catch (error) {
     logger.error(`❌ Contract verification failed: ${error}`);
@@ -64,7 +64,7 @@ async function main() {
         
     logger.info('🏁 Deployment process completed successfully!');
     logger.info(`📋 Summary:`);
-    logger.info(`   - Contract Address: ${votingContract.address}`);
+    logger.info(`   - Contract Address: ${identityContract.address}`);
     logger.info(`   - Admin Address: ${address}`);
     logger.info(`   - Sponsored FPC: ${sponsoredFPC.address}`);
 }
