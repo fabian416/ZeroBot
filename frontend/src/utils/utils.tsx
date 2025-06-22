@@ -1,6 +1,6 @@
 
 import * as circomlib from 'circomlibjs';
-import { AztecAddress, Fq, Fr, Salt, EthAddress } from '@aztec/aztec.js';
+import { AztecAddress, Fq, Fr, Salt, EthAddress, getContractInstanceFromDeployParams } from '@aztec/aztec.js';
 import { getSchnorrWalletWithSecretKey } from '@aztec/accounts/schnorr';
 import { deriveSigningKey } from '@aztec/stdlib/keys';
 import { ZeroBotContractArtifact } from '../../artifacts/ZeroBot';
@@ -35,25 +35,8 @@ export const poseidonHash = async (value1: string, value2: any) => {
 };
 
 
-export async function registerZeroBotContract(pxe: any) {
-  const contractAddr = AztecAddress.fromString(import.meta.env.VITE_PUBLIC_CONTRACT_ADDRESS!);
-  const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
-  const adminAddress = AztecAddress.fromString(admin);
-  const salt = import.meta.env.VITE_PUBLIC_WALLET_SALT;
-    const saltKey = Fr.fromString(salt);
-
-    await pxe.registerContract({
-        artifact: ZeroBotContractArtifact,
-        deployer: adminAddress,
-        deploymentSalt: saltKey,
-    });
-
-
-  console.log('✅ ZeroBot registrado en el PXE');
-}
-
 export async function getDeployerWalletFromEnv(pxe: any) {
-    const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
+    //const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
     const secret = import.meta.env.VITE_PUBLIC_WALLET_SECRET;
     const salt = import.meta.env.VITE_PUBLIC_WALLET_SALT;
     if (!secret || !salt) {
@@ -62,13 +45,27 @@ export async function getDeployerWalletFromEnv(pxe: any) {
 
     const secretKey = Fr.fromString(secret); 
     const saltKey = Fr.fromString(salt);
-    const adminAddress = AztecAddress.fromString(admin);
-    // Derivamos la signingKey a partir de la secretKey
+    //const adminAddress = AztecAddress.fromString(admin);
+    //console.log(adminAddress);
     const signingKey = deriveSigningKey(secretKey);
 
     const wallet = await getSchnorrWalletWithSecretKey(pxe, secretKey, signingKey, saltKey);
-    console.log(wallet.getAddress());
+    const address = wallet.getAddress().toString();
+    console.log(address);
     return wallet;
+}
+
+export const getInstance = async () => {
+    const admin = import.meta.env.VITE_PUBLIC_WALLET_ADDRESS;
+    const salt = import.meta.env.VITE_PUBLIC_WALLET_SALT;
+    const instance = getContractInstanceFromDeployParams(
+        ZeroBotContractArtifact, {
+        deployer: AztecAddress.fromString(admin),
+        constructorArgs: [AztecAddress.fromString(admin)],
+        salt: Fr.fromString(salt),
+        }
+    );
+    return instance;
 }
 
 export const contractAddress = import.meta.env.VITE_PUBLIC_CONTRACT_ADDRESS!;

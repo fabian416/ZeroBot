@@ -6,6 +6,9 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import {
   createPXEClient,
   AztecAddress,
+  SponsoredFeePaymentMethod,
+  EthAddress,
+  getContractInstanceFromDeployParams
 } from '@aztec/aztec.js';
 
 import {
@@ -17,10 +20,12 @@ import { setupPXE } from '../utils/setupPXE';
 import { useWalletClient } from 'wagmi';
 import { BrowserProvider } from 'ethers';
 import { v4 as uuidv4 } from 'uuid';
-import { getDeployerWalletFromEnv, poseidonHash, registerZeroBotContract } from '../utils/utils';
+import { getDeployerWalletFromEnv, getInstance, poseidonHash } from '../utils/utils';
 import internalApi from '../api/axios';
 import { contractAddress } from '../utils/utils';
 import ProofGeneration from '../components/ProofGeneration';
+import { getSponsoredFPCInstance } from "../utils/sponsored_fpc.js";
+import { SponsoredFPCContract } from "@aztec/noir-contracts.js/SponsoredFPC";
 
 export default function Home({ onClose }: { onClose?: () => void }) {
   const [status, setStatus] = useState<"idle" | "getting" | "zkPassport" | "challenge" | "creating" | "finish">("idle")
@@ -72,30 +77,39 @@ export default function Home({ onClose }: { onClose?: () => void }) {
   }*/
 
   const createIdentity = async (contract: string, passportData: any) => {
-    console.log("1")
-      const pxe = await setupPXE();
-      const wallet = await getDeployerWalletFromEnv(pxe);
-      await registerZeroBotContract(pxe);
-  
-      const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
-      const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
-      const tx = zeroBot.methods
-        .create_identity(
-          passportData.firstname, 
-          passportData.lastname,
-          passportData.documentType,
-          passportData.documentNumber,
-          userPubKeyX,
-          userPubKeyY,
-          userSignature,
-          userDigest
-        )
-        .send();
-  
-      await tx.getTxHash();
-      await tx.wait();
-  
-      return { userSignature, userPubKeyX, userPubKeyY, userDigest };
+    const pxe = await setupPXE();
+    const sponsoredFPC = await getSponsoredFPCInstance();
+    await pxe.registerContract({ instance: sponsoredFPC, artifact: SponsoredFPCContract.artifact });
+    const sponsoredPaymentMethod = new SponsoredFeePaymentMethod(sponsoredFPC.address);
+    const wallet = await getDeployerWalletFromEnv(pxe);
+
+    const instance = await getInstance();
+
+    await pxe.registerContract({ 
+      instance, 
+      artifact: ZeroBotContractArtifact,
+      contractAddress: AztecAddress.fromString(contract),
+    });
+
+    const zeroBot = await ZeroBotContract.at(AztecAddress.fromString(contract), wallet);
+    const { userSignature, userPubKeyX, userPubKeyY, userDigest } = await parseUserChallenge();
+    const tx = zeroBot.methods
+      .create_identity(
+        passportData.firstname, 
+        passportData.lastname,
+        passportData.documentType,
+        passportData.documentNumber,
+        userPubKeyX,
+        userPubKeyY,
+        userSignature,
+        userDigest
+      )
+      .send();
+
+    await tx.getTxHash();
+    await tx.wait();
+
+    return { userSignature, userPubKeyX, userPubKeyY, userDigest };
   }
 
 
