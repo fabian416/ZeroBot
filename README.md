@@ -1,4 +1,3 @@
-
 # ZeroBot
 
 A ZK-based Discord verification bot: prove you're human once, and verify everywhere.
@@ -9,7 +8,7 @@ A ZK-based Discord verification bot: prove you're human once, and verify everywh
 
 ZeroBot allows Discord users to privately prove they're human using Zero-Knowledge (ZK) proofs. Once verified, users can access any server or channel across the platform, without ever having to deal with CAPTCHAs again.
 
-By leveraging Aztec's privacy features, ZeroBot offers a seamless and secure verification process that doesn’t require exposing personal data.
+By leveraging Aztec's privacy features, ZeroBot offers a seamless and secure verification process that doesn't require exposing personal data.
 
 ---
 
@@ -34,7 +33,7 @@ Key components:
 
 ## 🔧 Contract Logic
 
-The ZeroBot smart contract allows users to create and verify identities. Here’s a simplified version of the key contract logic:
+The ZeroBot smart contract allows users to create and verify identities. Here's a simplified version of the key contract logic:
 
 ```rust
 #[storage]
@@ -103,13 +102,49 @@ git clone https://github.com/fabian416/ZeroBot
 cd ZeroBot
 ```
 
-### 2. Install dependencies and start the backend
+### 2. Backend Configuration
+
+#### 2.1 Create your Discord bot (required for .env)
+
+To integrate ZeroBot with Discord servers, you'll need to create a Discord application and bot:
+
+1. **Create a new Discord application:**
+   - Go to https://discord.com/developers/applications
+   - Click "New Application" and give it a name (e.g., "ZeroBot")
+   - Navigate to the "Bot" section in the left sidebar
+
+2. **Configure the bot:**
+   - Click "Add Bot" to create a bot user
+   - Under the "Token" section, click "Copy" to copy your bot token
+   - **Important:** Keep this token secure and never share it publicly
+
+3. **Set bot permissions:**
+   - Go to the "OAuth2" → "URL Generator" section
+   - Select "bot" scope
+   - Select the following bot permissions:
+     - Send Messages
+     - Read Message History
+     - Use Slash Commands
+     - Manage Roles (for verification role assignment)
+
+4. **Invite the bot to your test server:**
+   - Copy the generated URL and open it in your browser
+   - Select a Discord server where you have admin permissions
+   - Authorize the bot
+
+#### 2.2 Install dependencies and start the backend
+
 ```bash
 cd backend
 cp .env.example .env
+# Edit .env file with your Discord bot token and other required variables
 bun install
-bun run 
+bun run dev
 ```
+
+**Note:** Make sure to update your `.env` file with:
+- `TOKEN`: Your Discord bot token from step 2.1
+- Any other required environment variables listed in `.env.example`
 
 ### 3. Install dependencies and start the frontend
 ```bash
@@ -118,6 +153,8 @@ cp .env.example .env
 yarn install
 yarn start
 ```
+
+
 
 Visit `http://localhost:3002` to start the demo.
 

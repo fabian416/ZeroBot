@@ -6,10 +6,10 @@
       "dependencies": {
         "@aztec/accounts": "^0.87.9",
         "@aztec/aztec.js": "^0.87.9",
-        "@aztec/bb.js": "0.72.1",
+        "@aztec/bb.js": "0.84.0",
         "@heroicons/react": "^2.2.0",
         "@monaco-editor/react": "^4.6.0",
-        "@noir-lang/noir_js": "1.0.0-beta.2",
+        "@noir-lang/noir_js": "1.0.0-beta.6",
         "@noir-lang/noir_wasm": "^1.0.0-beta.3",
         "@rainbow-me/rainbowkit": "^2.2.7",
         "@react-three/drei": "^9.122.0",
@@ -71,7 +71,7 @@
 
     "@aztec/aztec.js": ["@aztec/aztec.js@0.87.9", "", { "dependencies": { "@aztec/constants": "0.87.9", "@aztec/entrypoints": "0.87.9", "@aztec/ethereum": "0.87.9", "@aztec/foundation": "0.87.9", "@aztec/l1-artifacts": "0.87.9", "@aztec/protocol-contracts": "0.87.9", "@aztec/stdlib": "0.87.9", "axios": "^1.8.2", "tslib": "^2.4.0", "viem": "2.23.7" } }, "sha512-1KFWBuQr3m1aFZkfdunDtA2wiyRTIFbBqwFg19pIuAwUzXMfkE9pxqaXNUjSQNyBkKK9mhfSeC3AsdPacYwhLg=="],
 
-    "@aztec/bb.js": ["@aztec/bb.js@0.72.1", "", { "dependencies": { "comlink": "^4.4.1", "commander": "^12.1.0", "debug": "^4.3.4", "fflate": "^0.8.0", "pako": "^2.1.0", "tslib": "^2.4.0" }, "bin": { "bb.js": "dest/node/main.js" } }, "sha512-CyySqBvaA/TJ/e8KksDp6vS44IUMY2LNJbigm4rKc3jJXjj0xc33V6V5DfC9kR0iVGnFFsvm+BlVBxFsCIQaAg=="],
+    "@aztec/bb.js": ["@aztec/bb.js@0.84.0", "", { "dependencies": { "comlink": "^4.4.1", "commander": "^12.1.0", "debug": "^4.3.4", "fflate": "^0.8.0", "pako": "^2.1.0", "tslib": "^2.4.0" }, "bin": { "bb.js": "dest/node/main.js" } }, "sha512-jNx35PCtevQnIBAyld90JjI+fGTrhcbXH6FkcZoRRpBPvnlZVTmIAU3j16q136m+mFgIBlCuzjOE6ND4cOgnQQ=="],
 
     "@aztec/blob-lib": ["@aztec/blob-lib@0.87.9", "", { "dependencies": { "@aztec/constants": "0.87.9", "@aztec/foundation": "0.87.9", "c-kzg": "4.0.0-alpha.1", "tslib": "^2.4.0" } }, "sha512-LDmNJDudj4oSMNwrxy7NHZQnr9LAvnXCpHfjQ13I1vNp4Hp4HBS+eyAS0bS+etnm5ohBXNLsKOEDZlLpKjIfjw=="],
 
@@ -409,15 +409,15 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@noir-lang/acvm_js": ["@noir-lang/acvm_js@1.0.0-beta.2", "", {}, "sha512-vZYidnNS0MGRddggrq73Te0MiOb7j7ehZwM5L0dbxGwG6RqUNU+RDjG/TE7VUHOOFkZGY20lQqjHY1mj4pOH2A=="],
+    "@noir-lang/acvm_js": ["@noir-lang/acvm_js@1.0.0-beta.6", "", {}, "sha512-/gaUKaUIon3xCekEIvrz9sUj+h1tue6CchNUZwmuXoqbwccRQchr850vbQMQxxnQvFIAfbaKD+Vkkh3RNWpG2Q=="],
 
-    "@noir-lang/noir_js": ["@noir-lang/noir_js@1.0.0-beta.2", "", { "dependencies": { "@noir-lang/acvm_js": "1.0.0-beta.2", "@noir-lang/noirc_abi": "1.0.0-beta.2", "@noir-lang/types": "1.0.0-beta.2" } }, "sha512-CiHnU5H1tUQHoKheHh93Ss7DJificdjXFUUfdasjMd8lsCMCPqY/oUoG4FZjWb7mWT8h0d/qcpGKMbs1VkBThQ=="],
+    "@noir-lang/noir_js": ["@noir-lang/noir_js@1.0.0-beta.6", "", { "dependencies": { "@noir-lang/acvm_js": "1.0.0-beta.6", "@noir-lang/noirc_abi": "1.0.0-beta.6", "@noir-lang/types": "1.0.0-beta.6", "pako": "^2.1.0" } }, "sha512-FRHrCgRcyD4LAh4FtVYZh/wwdoV2px3kokudLl5GfFaBmXHCpXyA0jKzda3ObI/Teasl2VAE+ZQoV7ZKqq5txA=="],
 
     "@noir-lang/noir_wasm": ["@noir-lang/noir_wasm@1.0.0-beta.7-e96b40c.nightly", "", { "dependencies": { "@noir-lang/types": "1.0.0-beta.7-e96b40c.nightly", "pako": "^2.1.0" } }, "sha512-7i18mzFEuu/UWp6j016H+fA2g02iUXAtaY5khmTJe819ATzYUOkB+EhkV1rK11MDnNESKChQJVHASDtLCCxOpw=="],
 
-    "@noir-lang/noirc_abi": ["@noir-lang/noirc_abi@1.0.0-beta.2", "", { "dependencies": { "@noir-lang/types": "1.0.0-beta.2" } }, "sha512-8/Pc6C0IY4F3UCsubs96G4Nwalzo49TVW+2jej7uNaEJB7LCqbOk5G641XGcCV2McS7n7WbLt1eN3cKJrxUWrA=="],
+    "@noir-lang/noirc_abi": ["@noir-lang/noirc_abi@1.0.0-beta.6", "", { "dependencies": { "@noir-lang/types": "1.0.0-beta.6" } }, "sha512-AFRl7zAK1ooA7AeKTt5dSxjfcXdmpYU4imRx8MS/UGhuLvUULM6d+AQ/OGEb1kdGwnw+qN4REnxJg7R4qsRpVQ=="],
 
-    "@noir-lang/types": ["@noir-lang/types@1.0.0-beta.2", "", {}, "sha512-0CosvfeAhwjmEt5cwJtEbju+8itRpmOUOmyt6TUo6JcRxaR8d4A+7j0sOgGxs2KVqWnMi1akJdGodAu0e4H+1A=="],
+    "@noir-lang/types": ["@noir-lang/types@1.0.0-beta.6", "", {}, "sha512-YmNOpr51XIOrJ+yppPbDFlpAG6ZU7qh0Uu0ZCXmon2MGD4TlnC8d/ex7YzSUH/+3zgESuCmicKnMVxEFszgmtA=="],
 
     "@obsidion/bridge": ["@obsidion/bridge@0.10.2", "", { "dependencies": { "@noble/ciphers": "^1.2.1", "@noble/hashes": "^1.8.0", "@noble/secp256k1": "^2.2.3", "@types/pako": "^2.0.3", "debug": "^4.3.4", "pako": "^2.1.0", "tsc-alias": "^1.8.16", "ws": "^8.16.0" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-BxFehLeJuvPkbemXYBv+X4Y+72URzsc8SYvG1FVi9yiGZLC4D8gc42M2JVBqdSBnxCDi3dJkQTqy9L7qBHsSLQ=="],
 

@@ -1,4 +1,4 @@
-use poseidon::poseidon2;
+use poseidon::poseidon;
 
 fn main(
     name: Field,
@@ -8,7 +8,7 @@ fn main(
     expected_hash: pub Field
 ) {
     // Calculamos el hash como en el contrato Aztec
-    let hash = poseidon2::Poseidon2::hash([name, last_name, document_type, document_number], 1);
+    let hash = poseidon::bn254::hash_4([name, last_name, document_type, document_number]);
 
     // Verificamos que coincida con el hash guardado
     assert(hash == expected_hash);
