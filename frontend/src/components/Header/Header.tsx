@@ -11,11 +11,12 @@ type HeaderMenuLink = {
 };
 
 export const menuLinks: HeaderMenuLink[] = [
+  /*
   {
     label: "Home",
     href: "/",
   }
-];
+*/];
 
 export const HeaderMenuLinks = () => {
   const location = useLocation();
@@ -31,7 +32,7 @@ export const HeaderMenuLinks = () => {
               to={href}
               className={`${
                 isActive ? "bg-gradient-to-r from-purple-600 to-blue-500 shadow-lg" : ""
-              } bg-gradient-to-r from-purple-600/80 to-blue-500/80 hover:from-purple-500 hover:to-blue-400 focus:!bg-gradient-to-r focus:!from-purple-600 focus:!to-blue-500 text-white active:!text-white py-2 px-4 text-sm rounded-xl gap-2 grid grid-flow-col transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25`}
+              } bg-gradient-to-r from-purple-600/80 to-blue-500/80 hover:from-purple-500 hover:to-blue-400 focus:!bg-gradient-to-r focus:!from-purple-600 focus:!to-blue-500 text-white active:!text-white px-4 text-sm rounded-xl gap-2 grid grid-flow-col transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25`}
             >
               {icon}
               <span className="font-semibold">{label}</span>
@@ -73,11 +74,10 @@ export const Header = () => {
               </ul>
             )}
           </div>
-          <div className="flex justify-center items-center w-16 h-16 ml-2 mr-4">
-            <Link to="/" className="hover:scale-110 transition-transform duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25">
-                <span className="text-white font-bold text-lg">ZB</span>
-              </div>
+          <div className="flex justify-center items-center ml-2 mr-4 z-100 py-2">
+            <Link to="/" className="flex flex-row justify-center items-center hover:scale-110 transition-transform duration-300">
+              <img src="favicon.png" className="brightness-200 contrast-200 h-10 w-10 mr-2" />
+              <h1 className="gradient-text text-xl font-black">ZeroBot</h1>
             </Link>
           </div>
           <ul className="hidden sm:flex lg:flex-nowrap menu menu-horizontal px-1 gap-3">

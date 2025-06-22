@@ -160,8 +160,16 @@ export default function Home({ onClose }: { onClose?: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-      <div className="relative w-full max-w-md mx-auto p-0">
-        <div className="futuristic-card neon-shadow p-8 pt-6 flex flex-col items-center">
+      <div className="relative w-full max-w-lg mx-auto p-0">
+        {status === "zkPassport" ? (
+          <ZKPassportComponent
+            contractAddress={contract}
+            createIdentity={createIdentity}
+            getPrivateIdentity={() => {}}
+            onClose={() => setStatus("idle")}
+          />
+        ) : (
+          <div className="futuristic-card neon-shadow p-8 pt-6 flex flex-col items-center">
           {onClose && (
             <button
               className="absolute top-4 right-4 text-purple-200 hover:text-white text-xl font-bold bg-transparent border-none outline-none"
@@ -171,21 +179,10 @@ export default function Home({ onClose }: { onClose?: () => void }) {
               ×
             </button>
           )}
-          <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg mb-4">
-            <span className="text-white font-bold text-xl">ZB</span>
-          </div>
-          <h1 className="gradient-text text-3xl font-black mb-2">ZeroBot</h1>
-          <p className="text-purple-200/90 text-center font-medium mb-6">
-            Privately prove you're not a bot to join the Discord server
-          </p>
-          {status === "zkPassport" ? (
-            <ZKPassportComponent
-              contractAddress={contract}
-              createIdentity={createIdentity}
-              getPrivateIdentity={() => {}}
-              onClose={() => setStatus("idle")}
-            />
-          ) : (
+          <img src="favicon.png" className="h-18 w-18" />
+            <p className="text-purple-200/90 text-center font-medium mb-4">
+              Privately prove you're not a bot to join the Discord server
+            </p>
             <div className="w-full flex flex-col items-center">
               {!isConnected ? (
                 <div className="glass-effect p-4 rounded-xl border border-purple-500/30 w-full">
@@ -214,8 +211,8 @@ export default function Home({ onClose }: { onClose?: () => void }) {
                 </button>
               )}
             </div>
-          )}
-          <button onClick={sendPostRequest}>Send Post Request</button>
+              {//  <button onClick={sendPostRequest}>Send Post Request</button>
+              }
           {error && (
             <div className="mt-4 bg-red-500/10 border border-red-500/30 text-red-300 p-3 rounded-xl backdrop-blur-sm w-full text-center">
               <div className="flex items-center gap-2 justify-center">
@@ -227,6 +224,7 @@ export default function Home({ onClose }: { onClose?: () => void }) {
             </div>
           )}
         </div>
+        )}
       </div>
     </div>
   );
