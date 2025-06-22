@@ -26,7 +26,20 @@ async function removeNewUserRole(userId, guildId, shouldRemove) {
         }
 
         await member.roles.remove(newUserRole);
-        console.log(`Removed New User role from ${member.user.tag}`);
+
+        // Find the "New User" role or create it if it doesn't exist
+        let validatedUserRole = member.guild.roles.cache.find(role => role.name === "Validated User");
+        if (!validatedUserRole) {
+            validatedUserRole = await member.guild.roles.create({
+                name: 'Validated User',
+                color: '#ff0000', // red color
+                reason: 'Role for validated server members'
+            });
+        }
+
+        // Add the role to the new member
+        await member.roles.add(validatedUserRole);
+        console.log(`Removed New User role from ${member.user.tag} and added Validated User role`);
         
         return { 
             success: true, 
